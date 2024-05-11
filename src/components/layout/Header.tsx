@@ -1,7 +1,17 @@
+import { useUser } from '@/hook/useUser'
 import { Box, CardMedia } from '@mui/material'
+import { useRouter } from 'next/router';
 import React from 'react'
 
 const Header = () => {
+  const {user} = useUser();
+  const router = useRouter();
+
+  const gotoLogin = () => {
+    if(user.nickname === ''){
+      router.push('/login');
+    }
+  }
   return (
     <Box sx={headerStyle}>
       <Box sx={leftStyle}>
@@ -21,6 +31,7 @@ const Header = () => {
           image={'/images/profile.png'}
           title="profile"
           sx={profileStyle}
+          onClick={gotoLogin}
         />
     </Box>
   )
