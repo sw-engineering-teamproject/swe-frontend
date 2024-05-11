@@ -1,5 +1,6 @@
 import { useTheme } from "@emotion/react";
 import { Box } from "@mui/material";
+import Header from "./Header";
 
 const AppLayout = (props: { children: React.ReactNode }) => {
   const theme = useTheme();
@@ -10,8 +11,7 @@ const AppLayout = (props: { children: React.ReactNode }) => {
         height: '100vh',
         bgcolor: 'white',
         }}>
-        <Box sx={{width: '100%', height: '5rem'}}>
-        </Box>
+        <Header/>
         {props.children}
       </Box>
     </Box>
