@@ -1,14 +1,14 @@
 import AppLayout from "@/components/layout/AppLayout";
-// import { UserProvider } from "@/contexts/UserContext";
+import { UserProvider } from "@/contexts/UserContext";
 import "@/styles/globals.css";
 import type { AppProps } from "next/app";
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
-    // <UserProvider>
+    <UserProvider>
       <AppLayout>
         <Component {...pageProps} />
       </AppLayout>
-    // </UserProvider>
+    </UserProvider>
   );
 }
