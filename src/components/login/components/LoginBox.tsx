@@ -21,7 +21,7 @@ const LoginBox = () => {
         ID
         <TextField sx={textFieldStyle} id='outlined-basic' label='ID' variant='outlined' onChange={handleIdChange}/>
         PassWord
-        <TextField sx={textFieldStyle} id='outlined-basic' label='ID' variant='outlined' onChange={handlePwChange}/>
+        <TextField sx={textFieldStyle} id='outlined-basic' label='PW' variant='outlined' onChange={handlePwChange}/>
       </Box>
     </Box>
   )
@@ -65,6 +65,7 @@ const loginStyle = {
 
 const textFieldStyle = {
   width: '100%',
+  marginTop: '0.4rem',
   marginBottom: '1rem',
   '& .MuiOutlinedInput-root': {
     '& fieldset': {
