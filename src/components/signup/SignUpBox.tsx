@@ -1,7 +1,10 @@
+import { postRegister } from '@/apis/login';
 import { Box, TextField } from '@mui/material'
+import { useRouter } from 'next/router';
 import React, { useState } from 'react'
 
 const SignUpBox = () => {
+  const router = useRouter();
   const [id, setId] = useState<string>('');
   const [pw, setPw] = useState<string>('');
   const [name, setName] = useState<string>('');
@@ -17,9 +20,13 @@ const SignUpBox = () => {
     setName(event.target.value);
   };
 
-  const handleClick = () => {
-    
-  }
+  const handleClick = async () => {
+    // const data = await postRegister({id, pw, name});
+    const data = '123';
+    if(data){
+      router.push('/login');
+    }
+  };
 
   return (
     <Box sx={containerStyle}>

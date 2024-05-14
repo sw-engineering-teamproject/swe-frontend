@@ -1,7 +1,10 @@
+import { postLogin } from '@/apis/login';
 import { Box, TextField } from '@mui/material'
+import { useRouter } from 'next/router';
 import React, { useState } from 'react'
 
 const LoginBox = () => {
+  const router = useRouter();
   const [id, setId] = useState<string>('');
   const [pw, setPw] = useState<string>('');
   const handleIdChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -12,8 +15,12 @@ const LoginBox = () => {
     setPw(event.target.value);
   };
 
-  const handleClick = () => {
-    
+  const handleClick = async () => {
+    // const data = await postLogin({id, pw});
+    const data = '123';
+    if(data){
+      router.push('/');
+    }
   };
 
   return (
