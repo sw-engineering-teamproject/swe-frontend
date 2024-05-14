@@ -1,5 +1,6 @@
 import { Box, CardMedia, TextField } from '@mui/material'
 import React, { useState } from 'react'
+import ProjectBox from './ProjectBox';
 
 const Main = () => {
   const [search, setSearch] = useState<string>('');
@@ -23,6 +24,9 @@ const Main = () => {
         onClick={handleSearch}
         />
     </Box>
+
+    <ProjectBox title={'project_1'}/>
+    <ProjectBox title={'project_2'}/>
     </Box>
   )
 }
@@ -37,7 +41,6 @@ const containerStyle = {
   flexDirection: 'column',
   alignItems: 'center',
   gap: '1rem',
-
 };
 
 const titleStyle = {
