@@ -1,9 +1,10 @@
 import { Box, TextField } from '@mui/material'
 import React, { useState } from 'react'
 
-const LoginBox = () => {
+const SignUpBox = () => {
   const [id, setId] = useState<string>('');
   const [pw, setPw] = useState<string>('');
+  const [name, setName] = useState<string>('');
   const handleIdChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setId(event.target.value);
   };
@@ -12,20 +13,27 @@ const LoginBox = () => {
     setPw(event.target.value);
   };
 
+  const handleNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setName(event.target.value);
+  };
+
   const handleClick = () => {
     
-  };
+  }
 
   return (
     <Box sx={containerStyle}>
       <Box sx={titleStyle}>
-        Sign In
+        Sign Up
       </Box>
       <Box sx={loginStyle}>
         ID
         <TextField sx={textFieldStyle} id='outlined-basic' label='ID' variant='outlined' onChange={handleIdChange}/>
         PassWord
         <TextField sx={textFieldStyle} id='outlined-basic' label='PW' variant='outlined' onChange={handlePwChange}/>
+        Nickname
+        <TextField sx={textFieldStyle} id='outlined-basic' label='Nickname' variant='outlined' onChange={handleNameChange}/>
+
       </Box>
       <Box sx={buttonStyle} onClick={handleClick}>
         DONE
@@ -34,11 +42,11 @@ const LoginBox = () => {
   )
 }
 
-export default LoginBox;
+export default SignUpBox;
 
 const containerStyle = {
   width: '50%',
-  height: '50%',
+  height: '70%',
   bgcolor: '#FFFFFF',
   borderRadius: '30px',
   boxShadow: '0px 4px 4px 0px rgba(0, 0, 0, 0.20)',
