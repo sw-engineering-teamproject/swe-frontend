@@ -1,7 +1,18 @@
+import { useUser } from '@/hook/useUser';
 import { Box } from '@mui/material';
-import React from 'react'
+import { useRouter } from 'next/router';
+import React, { useEffect } from 'react'
 
 const Project = () => {
+  const {setProject} = useUser();
+  const router = useRouter();
+  const title = router.query.title;
+  useEffect(()=>{
+    if(title && typeof title === 'string'){
+      setProject(title);
+      console.log(title);
+    }
+  },[router.query, setProject])
   return (
     <Box sx={containerStyle}>
 

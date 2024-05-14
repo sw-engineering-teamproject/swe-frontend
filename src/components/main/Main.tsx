@@ -1,8 +1,11 @@
 import { Box, CardMedia, TextField } from '@mui/material'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import ProjectBox from './ProjectBox';
+import { useRouter } from 'next/router';
+import { useUser } from '@/hook/useUser';
 
 const Main = () => {
+  const router = useRouter();
   const [search, setSearch] = useState<string>('');
   const handleIdChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearch(event.target.value);
@@ -10,7 +13,7 @@ const Main = () => {
 
   const handleSearch = () => {
 
-  }
+  };
 
   return (
     <Box sx={containerStyle}>

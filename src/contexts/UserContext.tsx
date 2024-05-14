@@ -7,15 +7,20 @@ export interface UserContextValues{
   };
   setNickname: (value: string) => void;
   setAccessToken: (value: string) => void;
+  project: string,
+  setProject: (value: string) => void;
+
 };
 
 const contextDefaultValue: UserContextValues = {
   user:{
-    nickname: '',
+    nickname: 'Junyewdd',
     accessToken: '',
   },
   setNickname: () => {},
   setAccessToken: () => {},
+  project: '',
+  setProject: () => {},
 };
 
 export const UserContext = createContext(contextDefaultValue);
@@ -23,6 +28,7 @@ export const UserContext = createContext(contextDefaultValue);
 export const UserProvider = ({children} : {children: ReactNode}) => {
   const [nickname, setNickname] = useState(contextDefaultValue.user.nickname);
   const [accessToken, setAccessToken] = useState(contextDefaultValue.user.accessToken);
+  const [project, setProject] = useState(contextDefaultValue.project);
 
   useEffect(() => {
     contextDefaultValue.user.nickname = nickname;
@@ -30,7 +36,7 @@ export const UserProvider = ({children} : {children: ReactNode}) => {
   }, [nickname]);
 
   return (
-    <UserContext.Provider value={{user: {nickname, accessToken}, setNickname, setAccessToken}}>
+    <UserContext.Provider value={{user: {nickname, accessToken}, setNickname, setAccessToken, project, setProject}}>
       {children}
     </UserContext.Provider>
   )

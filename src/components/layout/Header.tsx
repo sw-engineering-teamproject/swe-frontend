@@ -1,11 +1,12 @@
 import { useUser } from '@/hook/useUser'
 import { Box, CardMedia } from '@mui/material'
 import { useRouter } from 'next/router';
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 
 const Header = () => {
-  const {user} = useUser();
+  const {user, project, setProject} = useUser();
   const router = useRouter();
+  const [title, setTitle] = useState<string>('');
 
   const gotoLogin = () => {
     if(user.nickname === ''){
@@ -13,8 +14,17 @@ const Header = () => {
     }
   }
   const gotoHome = () => {
+    setProject(``);
     router.push('/');
-  }
+  };
+
+  useEffect(() => {
+    if (project !== '') {
+      setTitle(`${user.nickname}/${project}`);
+    } else {
+      setTitle(`${user.nickname}`);
+    }
+  }, [project, user.nickname]);
   return (
     <Box sx={headerStyle}>
       <Box sx={leftStyle}>
@@ -26,7 +36,7 @@ const Header = () => {
           onClick={gotoHome}
         />
         <Box sx={titleStyle}>
-          hello
+          {title}
         </Box>
       </Box>
 
