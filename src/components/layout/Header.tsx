@@ -12,6 +12,9 @@ const Header = () => {
       router.push('/login');
     }
   }
+  const gotoHome = () => {
+    router.push('/');
+  }
   return (
     <Box sx={headerStyle}>
       <Box sx={leftStyle}>
@@ -20,6 +23,7 @@ const Header = () => {
           image={'/images/logo.png'}
           title="profile"
           sx={logoStyle}
+          onClick={gotoHome}
         />
         <Box sx={titleStyle}>
           hello
