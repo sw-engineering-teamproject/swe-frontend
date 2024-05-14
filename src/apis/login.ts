@@ -28,3 +28,13 @@ export const postRegister = async ({id, pw, name}:{id: string, pw: string, name:
     console.error(error);
   }
 };
+
+export const isNicknameDuplicated = async (name: string) => {
+  try{
+    const response = await axios.post(`${baseURL}/register/nickname`, {
+      nickname: name,
+    });
+  }catch(error){
+    console.error(error);
+  }
+}

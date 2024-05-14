@@ -1,13 +1,16 @@
-import { postRegister } from '@/apis/login';
+import { isNicknameDuplicated, postRegister } from '@/apis/login';
 import { Box, TextField } from '@mui/material'
 import { useRouter } from 'next/router';
 import React, { useState } from 'react'
+import DuplicationBox from './DuplicationBox';
 
 const SignUpBox = () => {
   const router = useRouter();
+  const [checkOpen, setCheckOpen] = useState<boolean>(false);
   const [id, setId] = useState<string>('');
   const [pw, setPw] = useState<string>('');
   const [name, setName] = useState<string>('');
+  const [duplicated, isDuplicated] = useState<boolean>(false);
   const handleIdChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setId(event.target.value);
   };
@@ -28,6 +31,21 @@ const SignUpBox = () => {
     }
   };
 
+  const handleLogoutClose = () => {
+    setCheckOpen(false);
+  }
+  const handleOpen = () => {
+    handleLogoutClose();
+  }
+
+  const checkDuplication = async () => {
+    const isDuplicated = await isNicknameDuplicated(name);
+    if(isDuplicated !== undefined && isDuplicated === true) {
+    
+    }
+    setCheckOpen(true);
+  }
+
   return (
     <Box sx={containerStyle}>
       <Box sx={titleStyle}>
@@ -39,12 +57,17 @@ const SignUpBox = () => {
         PassWord
         <TextField sx={textFieldStyle} id='outlined-basic' label='PW' variant='outlined' onChange={handlePwChange}/>
         Nickname
+        <Box sx={nicknameStyle}>
         <TextField sx={textFieldStyle} id='outlined-basic' label='Nickname' variant='outlined' onChange={handleNameChange}/>
-
+        <Box sx={nicknameButtonStyle} onClick={checkDuplication}>
+          중복 확인
+        </Box>
+        </Box>
       </Box>
       <Box sx={buttonStyle} onClick={handleClick}>
         DONE
       </Box>
+      <DuplicationBox checkOpen={checkOpen} handleClose={handleLogoutClose} isDuplicated={duplicated}/>
     </Box>
   )
 }
@@ -131,3 +154,28 @@ const buttonStyle = {
     bgcolor: 'black',
   },
 };
+
+const nicknameStyle = {
+  display: 'flex',
+  alignItems: 'center',
+};
+
+const nicknameButtonStyle = {
+  width: '80px',
+  height: '30px',
+  bgcolor: 'grey',
+  borderRadius: '500px',
+  margin: '10px',
+  color: 'white',
+  fontWeight: 'bold',
+  fontSize: '11px',
+  textAlign: 'center',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+
+  '&:hover': {
+    bgcolor: 'black',
+    cursor: 'pointer',
+  },
+}
