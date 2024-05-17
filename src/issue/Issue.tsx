@@ -14,7 +14,8 @@ const Issue = () => {
   },[router.query, setIssue]);
   return (
     <Box sx={containerStyle}>
-
+      <Box sx={titleStyle}>{title}</Box>
+      <Box sx={{width: '80%', height: '1px', bgcolor: 'grey',}}/>
     </Box>
   )
 }
@@ -29,4 +30,11 @@ const containerStyle = {
   flexDirection: 'column',
   alignItems: 'center',
   gap: '1rem',
+  padding: '5%',
   };
+
+const titleStyle = {
+  width: '80%',
+  fontSize: '40px',
+  fontWeight: 'bold',
+}
