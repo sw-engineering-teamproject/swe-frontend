@@ -4,7 +4,7 @@ import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react'
 
 const Header = () => {
-  const {user, project, setProject} = useUser();
+  const {user, project, setProject, issue, setIssue} = useUser();
   const router = useRouter();
   const [title, setTitle] = useState<string>('');
 
@@ -17,16 +17,20 @@ const Header = () => {
   }
   const gotoHome = () => {
     setProject(``);
+    setIssue('');
     router.push('/');
   };
 
   useEffect(() => {
-    if (project !== '') {
+    console.log(issue);
+    if(issue!==''){
+      setTitle(`${user.nickname}/${project}/${issue}`);
+    } else if (project !== '') {
       setTitle(`${user.nickname}/${project}`);
     } else {
       setTitle(`${user.nickname}`);
     }
-  }, [project, user.nickname]);
+  }, [project, user.nickname, issue]);
   return (
     <Box sx={headerStyle}>
       <Box sx={leftStyle}>

@@ -1,11 +1,14 @@
+import { useUser } from '@/hook/useUser';
 import { Box } from '@mui/material'
 import { useRouter } from 'next/router'
 import React from 'react'
 
 const IssueBox = ({title}: {title: string}) => {
   const router = useRouter();
+  const {project, setIssue} = useUser();
   const handleClick = () => {
-    router.push(`/project?title=${title}`);
+    setIssue(title);
+    router.push(`/issue?issue=${title}`);
   }
   return (
     <Box sx={containerStyle} onClick={handleClick}>

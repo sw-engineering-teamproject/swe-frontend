@@ -32,7 +32,6 @@ const Project = () => {
   useEffect(()=>{
     if(title && typeof title === 'string'){
       setProject(title);
-      console.log(title);
     }
   },[router.query, setProject])
   return (
