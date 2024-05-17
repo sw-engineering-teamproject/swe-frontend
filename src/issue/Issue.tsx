@@ -2,6 +2,8 @@ import { useUser } from '@/hook/useUser';
 import { Box } from '@mui/material';
 import { useRouter } from 'next/router';
 import React, { useEffect } from 'react'
+import Content from './Content';
+import Sub from './Sub';
 
 const Issue = () => {
   const {setIssue} = useUser();
@@ -16,6 +18,10 @@ const Issue = () => {
     <Box sx={containerStyle}>
       <Box sx={titleStyle}>{title}</Box>
       <Box sx={{width: '80%', height: '1px', bgcolor: 'grey',}}/>
+      <Box sx={issueContentStyle}>
+        <Content/>
+        <Sub/>
+      </Box>
     </Box>
   )
 }
@@ -31,10 +37,15 @@ const containerStyle = {
   alignItems: 'center',
   gap: '1rem',
   padding: '5%',
-  };
+};
 
 const titleStyle = {
   width: '80%',
   fontSize: '40px',
   fontWeight: 'bold',
-}
+};
+
+const issueContentStyle = {
+  width: '80%',
+  display: 'flex',
+};
