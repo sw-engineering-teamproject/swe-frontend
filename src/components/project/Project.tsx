@@ -4,6 +4,7 @@ import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react'
 import CreateBox from './CreateBox';
 import IssueBox from './IssueBox';
+import Filter from './Filter';
 
 const Project = () => {
   const {setProject} = useUser();
@@ -11,6 +12,7 @@ const Project = () => {
   const title = router.query.title;
   const [search, setSearch] = useState<string>('');
   const [checkOpen, setCheckOpen] = useState<boolean>(false);
+
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearch(event.target.value);
   };
@@ -36,6 +38,7 @@ const Project = () => {
   return (
     <Box sx={containerStyle}>
       <Box sx={searchBoxStyle}>
+      <Filter/>
       <TextField sx={textFieldStyle} id='outlined-basic' label='search...' variant='outlined' onChange={handleSearchChange}/>
       <CardMedia
         component="img"
