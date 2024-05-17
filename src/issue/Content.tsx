@@ -11,12 +11,14 @@ const Content = () => {
     };
   
     const handleSave = () => {
-      console.log(content);
+      setEdit(!edit);
       setSavedContent(content);
     };
   
     return (
       <Box sx={{ width: '100%', mx: 'auto' }}>
+        {edit &&
+        <>
         <TextField
           label="Write something"
           multiline
@@ -35,12 +37,24 @@ const Content = () => {
         >
           Save
         </Button>
-        {/* {savedContent && (
-          <Box mt={2}>
-            <h3>Saved Content:</h3>
-            <p>{savedContent}</p>
+        </>
+        }
+        {!edit &&
+          <>
+          <Box>
+            {savedContent}
           </Box>
-        )} */}
+          <Button
+          variant="contained" 
+          color="primary" 
+          onClick={handleSave}
+          sx={{ ...saveStyle, mt: 2 }}
+          >
+            Edit
+          </Button>
+          </>
+        }
+        
       </Box>
     );
 }
