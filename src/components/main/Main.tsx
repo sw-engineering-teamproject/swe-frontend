@@ -133,4 +133,4 @@ const createStyle = {
   justifyContent: 'center',
   fontWeight: 'bold',
   cursor: 'pointer',
-}
+};
