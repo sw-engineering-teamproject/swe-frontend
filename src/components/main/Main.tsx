@@ -1,15 +1,28 @@
 import { Box, CardMedia, TextField } from '@mui/material'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import ProjectBox from './ProjectBox';
+import { useRouter } from 'next/router';
+import { useUser } from '@/hook/useUser';
+import CreateBox from './CreateBox';
 
 const Main = () => {
+  const router = useRouter();
   const [search, setSearch] = useState<string>('');
+  const [checkOpen, setCheckOpen] = useState<boolean>(false);
   const handleIdChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearch(event.target.value);
   };
 
   const handleSearch = () => {
 
+  };
+
+  const openCreateProject = () => {
+    setCheckOpen(true);
+  }
+
+  const handleLogoutClose = () => {
+    setCheckOpen(false);
   }
 
   return (
@@ -23,6 +36,10 @@ const Main = () => {
         sx={searchStyle}
         onClick={handleSearch}
         />
+        <Box sx={createStyle} onClick={openCreateProject}>
+          Create
+        </Box>
+        <CreateBox checkOpen={checkOpen} handleClose={handleLogoutClose}/>
     </Box>
 
     <ProjectBox title={'project_1'}/>
@@ -103,4 +120,17 @@ const searchBoxStyle = {
   marginTop: '3rem',
   marginBottom: '1rem',
   alignItems: 'center',
-}
+};
+
+const createStyle = {
+  width: '70px',
+  height: '50px',
+  bgcolor: 'green',
+  color: 'white',
+  borderRadius: '20px',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  fontWeight: 'bold',
+  cursor: 'pointer',
+};
