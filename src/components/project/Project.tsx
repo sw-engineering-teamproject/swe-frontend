@@ -22,7 +22,8 @@ const Project = () => {
   };
 
   const openCreateProject = () => {
-    setCheckOpen(true);
+    // setCheckOpen(true);
+    router.push(`/issue`);
   };
 
   const handleLogoutClose = () => {
