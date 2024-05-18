@@ -37,6 +37,7 @@ const containerStyle = {
   alignItems: 'center',
   gap: '1rem',
   padding: '5%',
+  overflow: 'scroll',
 };
 
 const titleStyle = {

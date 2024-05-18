@@ -1,67 +1,71 @@
-import { Box, Button, TextField } from '@mui/material'
-import React, { useState } from 'react'
+import { Box, Button, TextField } from '@mui/material';
+import React, { useState } from 'react';
 import CommentWrite from './CommentWrite';
 import Comment from './Comment';
+import { useUser } from '@/hook/useUser';
 
 const Content = () => {
+  const {commentList} = useUser();
   const [edit, setEdit] = useState<boolean>(false);
   const [content, setContent] = useState<string>('');
   const [savedContent, setSavedContent] = useState<string>('');
-  
-    const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-      setContent(event.target.value);
-    };
-  
-    const handleSave = () => {
-      setEdit(!edit);
-      setSavedContent(content);
-    };
-  
-    return (
-      <Box sx={{ width: '100%', mx: 'auto' }}>
-        {edit &&
+  const commentContent = "ㅎㅇㅎㅇ";
+
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setContent(event.target.value);
+  };
+
+  const handleSave = () => {
+    setEdit(!edit);
+    setSavedContent(content);
+  };
+
+  return (
+    <Box sx={{ width: '100%', mx: 'auto', }}>
+      {edit &&
         <>
-        <TextField
-          label="Write something"
-          multiline
-          rows={17}
-          variant="outlined"
-          fullWidth
-          value={content}
-          onChange={handleChange}
-          sx={textFieldStyle}
-        />
-        <Button
-          variant="contained" 
-          color="primary" 
-          onClick={handleSave}
-          sx={{ ...saveStyle, mt: 2 }}
-        >
-          Save
-        </Button>
+          <TextField
+            label="Write something"
+            multiline
+            rows={17}
+            variant="outlined"
+            fullWidth
+            value={content}
+            onChange={handleChange}
+            sx={textFieldStyle}
+          />
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={handleSave}
+            sx={{ ...saveStyle, mt: 2 }}
+          >
+            Save
+          </Button>
         </>
-        }
-        {!edit &&
-          <>
+      }
+      {!edit &&
+        <>
           <Box>
             {savedContent}
           </Box>
           <Button
-          variant="contained" 
-          color="primary" 
-          onClick={handleSave}
-          sx={{ ...saveStyle, mt: 2 }}
+            variant="contained"
+            color="primary"
+            onClick={handleSave}
+            sx={{ ...saveStyle, mt: 2 }}
           >
             Edit
           </Button>
-          </>
-        }
-        
-        <Comment/>
-        <CommentWrite/>
-      </Box>
-    );
-}
+        </>
+      }
+      {commentList.map((comment, index) => (
+        <Comment key={index} commentContent={comment.commentContent} time={comment.time} name={comment.name} />
+      ))}
+      <CommentWrite />
+    </Box>
+  );
+};
 
 export default Content;
 
@@ -81,4 +85,4 @@ const textFieldStyle = {
 
 const saveStyle = {
   bgcolor: 'black',
-}
+};

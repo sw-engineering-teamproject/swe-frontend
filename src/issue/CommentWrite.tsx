@@ -1,7 +1,10 @@
 import { Box, Button, TextField } from '@mui/material'
 import React, { useState } from 'react'
+import Comment from './Comment';
+import { useUser } from '@/hook/useUser';
 
 const CommentWrite = () => {
+  const {addComment} = useUser();
   const [edit, setEdit] = useState<boolean>(true);
   const [content, setContent] = useState<string>('');
   const [savedContent, setSavedContent] = useState<string>('');
@@ -13,12 +16,12 @@ const CommentWrite = () => {
     const handleSave = () => {
       setEdit(!edit);
       setSavedContent(content);
+      addComment({commentContent: content, name: '쿠쿠', time: '1107'});
+      setContent('');
     };
   
     return (
       <Box sx={{ width: '100%', mx: 'auto', marginTop: '50px', fontWeight: 'bold', fontSize: '20px',}}>
-        {edit &&
-        <>
         Add a Comment
         <TextField
           label="Write something"
@@ -37,25 +40,7 @@ const CommentWrite = () => {
           sx={{ ...saveStyle, mt: 2 }}
         >
           Save
-        </Button>
-        </>
-        }
-        {!edit &&
-          <>
-          <Box>
-            {savedContent}
-          </Box>
-          <Button
-          variant="contained" 
-          color="primary" 
-          onClick={handleSave}
-          sx={{ ...saveStyle, mt: 2 }}
-          >
-            Edit
-          </Button>
-          </>
-        }
-        
+        </Button>        
       </Box>
     );
 }

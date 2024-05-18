@@ -1,19 +1,25 @@
 import { Box } from '@mui/material';
 import React from 'react'
 
-const Comment = () => {
+interface CommentProps {
+  commentContent: string;
+  time?: string;
+  name?: string;
+}
+
+const Comment: React.FC<CommentProps>  = ({commentContent, time, name}) => {
   return (
     <Box sx={containerStyle}>
       <Box sx={headerStyle}>
         <Box>
-        이름
+        {name}
         </Box>
         <Box>
-        시간
+        {time}
         </Box>
       </Box>
       <Box>
-        ㅎㅇㅎㅇ
+        {commentContent}
       </Box>
     </Box>
   )
@@ -28,8 +34,9 @@ marginTop: '30px',
 display: 'flex',
 flexDirection: 'column',
 border: '1px solid',
-
+bgcolor: 'white',
 gap: '5px',
+borderRadius: '5px',
 };
 
 const headerStyle = {
