@@ -1,10 +1,8 @@
 import { Box, Button, TextField } from '@mui/material'
 import React, { useState } from 'react'
-import CommentWrite from './CommentWrite';
-import Comment from './Comment';
 
-const Content = () => {
-  const [edit, setEdit] = useState<boolean>(false);
+const CommentWrite = () => {
+  const [edit, setEdit] = useState<boolean>(true);
   const [content, setContent] = useState<string>('');
   const [savedContent, setSavedContent] = useState<string>('');
   
@@ -18,13 +16,14 @@ const Content = () => {
     };
   
     return (
-      <Box sx={{ width: '100%', mx: 'auto' }}>
+      <Box sx={{ width: '100%', mx: 'auto', marginTop: '50px', fontWeight: 'bold', fontSize: '20px',}}>
         {edit &&
         <>
+        Add a Comment
         <TextField
           label="Write something"
           multiline
-          rows={17}
+          rows={5}
           variant="outlined"
           fullWidth
           value={content}
@@ -57,15 +56,14 @@ const Content = () => {
           </>
         }
         
-        <Comment/>
-        <CommentWrite/>
       </Box>
     );
 }
 
-export default Content;
+export default CommentWrite;
 
 const textFieldStyle = {
+  marginTop: '10px',
   '& .MuiOutlinedInput-root': {
     '& fieldset': {
       borderColor: 'black',
