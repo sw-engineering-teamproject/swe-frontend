@@ -1,4 +1,5 @@
 import { postProject } from '@/apis/project';
+import { useUser } from '@/hook/useUser';
 import { Box, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField } from '@mui/material'
 import React, { useState } from 'react'
 interface LogoutModalProps {
@@ -7,6 +8,7 @@ interface LogoutModalProps {
 }
 
 const CreateBox: React.FC<LogoutModalProps> = ({ checkOpen, handleClose }) => {
+  const {addProject} = useUser();
   const [title, setTitle] = useState<string>('');
   const [reporter, setReporter] = useState<string>('');
   const accessToken = "123";
@@ -17,6 +19,8 @@ const CreateBox: React.FC<LogoutModalProps> = ({ checkOpen, handleClose }) => {
     setReporter(event.target.value);
   };
   const handleCreate = async() => {
+    addProject({title: title, reporter: reporter});
+
     await postProject({title, reporter, accessToken});
     handleClose();
   }

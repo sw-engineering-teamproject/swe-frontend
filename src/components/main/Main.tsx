@@ -6,6 +6,7 @@ import { useUser } from '@/hook/useUser';
 import CreateBox from './CreateBox';
 
 const Main = () => {
+  const {projectList} = useUser();
   const router = useRouter();
   const [search, setSearch] = useState<string>('');
   const [checkOpen, setCheckOpen] = useState<boolean>(false);
@@ -41,9 +42,10 @@ const Main = () => {
         </Box>
         <CreateBox checkOpen={checkOpen} handleClose={handleLogoutClose}/>
     </Box>
-
-    <ProjectBox title={'project_1'}/>
-    <ProjectBox title={'project_2'}/>
+    
+    {projectList?.map((project, index) => (
+        <ProjectBox key={index} title={project.title} />
+    ))}
     </Box>
   )
 }
