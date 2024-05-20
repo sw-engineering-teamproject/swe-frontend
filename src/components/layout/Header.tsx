@@ -22,7 +22,6 @@ const Header = () => {
   };
 
   useEffect(() => {
-    console.log(issue);
     if(issue!==''){
       setTitle(`${user.nickname}/${project}/${issue}`);
     } else if (project !== '') {
