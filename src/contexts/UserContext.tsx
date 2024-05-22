@@ -48,7 +48,8 @@ const contextDefaultValue: UserContextValues = {
   commentList: [{commentContent: 'hi hi', time: '23,07.17.', name: '영은',}, {commentContent: 'ki ki ku ku', time: '23,12.25.', name: '영은',}],
   setCommentList: () => {},
   addComment: () => {},
-  projectList: [{title: 'project_5', reporter: 'Junye'}, {title: 'project_2', reporter: 'hihi'}],
+  // projectList: [{title: 'project_5', reporter: 'Junye'}, {title: 'project_2', reporter: 'hihi'}],
+  projectList: [],
   setProjectList: () => {},
   addProject: () => {},
 };
