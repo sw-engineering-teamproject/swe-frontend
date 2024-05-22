@@ -29,9 +29,8 @@ const SignUpBox = () => {
   };
 
   const handleClick = async () => {
-    const data = await postRegister({id, pw, name, role});
-    // const data = '123';
-    if(data){
+    const success = await postRegister({id, pw, name, role});
+    if(success){
       router.push('/login');
     }
   };
