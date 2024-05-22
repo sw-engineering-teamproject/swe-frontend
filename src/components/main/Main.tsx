@@ -29,14 +29,14 @@ const Main = () => {
   return (
     <Box sx={containerStyle}>
     <Box sx={searchBoxStyle}>
-      <TextField sx={textFieldStyle} id='outlined-basic' label='search...' variant='outlined' onChange={handleIdChange}/>
+      {/* <TextField sx={textFieldStyle} id='outlined-basic' label='search...' variant='outlined' onChange={handleIdChange}/>
       <CardMedia
         component="img"
         image={'/images/search.png'}
         title="profile"
         sx={searchStyle}
         onClick={handleSearch}
-        />
+        /> */}
         <Box sx={createStyle} onClick={openCreateProject}>
           Create
         </Box>
