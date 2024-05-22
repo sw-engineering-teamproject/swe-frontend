@@ -72,7 +72,7 @@ const containerStyle = {
   };
 
 const textFieldStyle = {
-  width: '500px',
+  width: '50%',
   '& .MuiOutlinedInput-root': {
       '& fieldset': {
         borderColor: 'black',

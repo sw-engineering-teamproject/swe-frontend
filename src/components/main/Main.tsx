@@ -4,9 +4,10 @@ import ProjectBox from './ProjectBox';
 import { useRouter } from 'next/router';
 import { useUser } from '@/hook/useUser';
 import CreateBox from './CreateBox';
+import { getProject } from '@/apis/project';
 
 const Main = () => {
-  const {projectList, user} = useUser();
+  const {projectList, user, setProjectList} = useUser();
   const router = useRouter();
   const [search, setSearch] = useState<string>('');
   const [checkOpen, setCheckOpen] = useState<boolean>(false);
@@ -24,7 +25,15 @@ const Main = () => {
 
   const handleLogoutClose = () => {
     setCheckOpen(false);
-  }
+  };
+
+  useEffect(()=>{
+    const fetchData = async () => {
+      const data = await getProject({accessToken: user.accessToken});
+      setProjectList(data);
+    }
+    fetchData();
+  }, []);
 
   return (
     <Box sx={containerStyle}>
@@ -49,7 +58,7 @@ const Main = () => {
               <ProjectBox key={index} title={project.title} />
           ))
           :
-          1
+          'Sign In'
         }
 
     </Box>
