@@ -1,6 +1,6 @@
 import axios from "axios"
 
-const baseURL = 'https://safeat.dongwoo.win/'
+const baseURL = 'https://swe.dongwoo.win'
 
 export const postLogin = async ({id, pw}: {id: string, pw: string}) => {
   try{
@@ -15,13 +15,15 @@ export const postLogin = async ({id, pw}: {id: string, pw: string}) => {
   }
 };
 
-export const postRegister = async ({id, pw, name}:{id: string, pw: string, name: string}) => {
+export const postRegister = async ({id, pw, name, role}:{id: string, pw: string, name: string, role: string}) => {
   try{
     const response = await axios.post(`${baseURL}/register`, {
       id: id,
       pw: pw,
       nickname: name,
+      role: role,
     });
+    console.log(response);
     return response.data;
 
   }catch(error){
@@ -34,6 +36,7 @@ export const isNicknameDuplicated = async (name: string) => {
     const response = await axios.post(`${baseURL}/register/nickname`, {
       nickname: name,
     });
+    return response.data;
   }catch(error){
     console.error(error);
   }

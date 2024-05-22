@@ -10,6 +10,7 @@ const SignUpBox = () => {
   const [id, setId] = useState<string>('');
   const [pw, setPw] = useState<string>('');
   const [name, setName] = useState<string>('');
+  const [role, setRole] = useState<string>('');
   const [duplicated, isDuplicated] = useState<boolean>(false);
   const handleIdChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setId(event.target.value);
@@ -23,9 +24,13 @@ const SignUpBox = () => {
     setName(event.target.value);
   };
 
+  const handleRoleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setRole(event.target.value);
+  };
+
   const handleClick = async () => {
-    // const data = await postRegister({id, pw, name});
-    const data = '123';
+    const data = await postRegister({id, pw, name, role});
+    // const data = '123';
     if(data){
       router.push('/login');
     }
@@ -41,7 +46,7 @@ const SignUpBox = () => {
   const checkDuplication = async () => {
     const isDuplicated = await isNicknameDuplicated(name);
     if(isDuplicated !== undefined && isDuplicated === true) {
-    
+      
     }
     setCheckOpen(true);
   }
@@ -56,6 +61,8 @@ const SignUpBox = () => {
         <TextField sx={textFieldStyle} id='outlined-basic' label='ID' variant='outlined' onChange={handleIdChange}/>
         PassWord
         <TextField sx={textFieldStyle} id='outlined-basic' label='PW' variant='outlined' onChange={handlePwChange}/>
+        Role
+        <TextField sx={textFieldStyle} id='outlined-basic' label='Role' variant='outlined' onChange={handleRoleChange}/>
         Nickname
         <Box sx={nicknameStyle}>
         <TextField sx={textFieldStyle} id='outlined-basic' label='Nickname' variant='outlined' onChange={handleNameChange}/>
