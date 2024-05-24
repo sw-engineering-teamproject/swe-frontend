@@ -27,7 +27,6 @@ export const getProject = async ({accessToken}:{accessToken: string}) => {
           Authorization: `Bearer ${accessToken}`
         }
       });
-      console.log(response);
     return response.data;
 
   }catch(error){

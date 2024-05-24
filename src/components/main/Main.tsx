@@ -33,7 +33,7 @@ const Main = () => {
       setProjectList(data);
     }
     fetchData();
-  }, []);
+  }, [user.accessToken, checkOpen]);
 
   return (
     <Box sx={containerStyle}>
@@ -55,7 +55,7 @@ const Main = () => {
           user.accessToken ?
           
           projectList?.map((project, index) => (
-              <ProjectBox key={index} title={project.title} />
+              <ProjectBox key={index} title={project.title} id={project.id}/>
           ))
           :
           'Sign In'

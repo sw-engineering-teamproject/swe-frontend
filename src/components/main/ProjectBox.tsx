@@ -1,10 +1,13 @@
+import { useUser } from '@/hook/useUser';
 import { Box } from '@mui/material'
 import { useRouter } from 'next/router'
 import React from 'react'
 
-const ProjectBox = ({title}: {title: string}) => {
+const ProjectBox = ({title, id}: {title: string, id: number}) => {
   const router = useRouter();
+  const {setProjectId} = useUser();
   const handleClick = () => {
+    setProjectId(id);
     router.push(`/project?title=${title}`);
   }
   return (

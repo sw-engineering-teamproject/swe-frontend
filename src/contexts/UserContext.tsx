@@ -8,6 +8,7 @@ export interface CommentProps {
 };
 
 export interface ProjectProps {
+  id: number;
   title: string;
   reporter?: string;
 }
@@ -20,6 +21,8 @@ export interface UserContextValues{
   setNickname: (value: string) => void;
   setAccessToken: (value: string) => void;
   project: string,
+  projectId: number,
+  setProjectId: (value: number) => void;
   setProject: (value: string) => void;
   issue: string,
   setIssue: (value: string) => void;
@@ -43,6 +46,8 @@ const contextDefaultValue: UserContextValues = {
   setAccessToken: () => {},
   project: '',
   setProject: () => {},
+  projectId: -1,
+  setProjectId: () => {},
   issue: '',
   setIssue: () => {},
   commentList: [{commentContent: 'hi hi', time: '23,07.17.', name: '영은',}, {commentContent: 'ki ki ku ku', time: '23,12.25.', name: '영은',}],
@@ -63,6 +68,7 @@ export const UserProvider = ({children} : {children: ReactNode}) => {
   const [issue, setIssue] = useState(contextDefaultValue.issue);
   const [commentList, setCommentList] = useState<CommentProps[]>(contextDefaultValue.commentList);
   const [projectList, setProjectList] = useState<ProjectProps[]>(contextDefaultValue.projectList);
+  const [projectId, setProjectId] = useState(contextDefaultValue.projectId);
 
   const addComment = (comment: CommentProps) => {
     setCommentList((prev) => [...prev, comment]);
@@ -78,7 +84,7 @@ export const UserProvider = ({children} : {children: ReactNode}) => {
   }, [nickname]);
 
   return (
-    <UserContext.Provider value={{user: {nickname, accessToken}, setNickname, setAccessToken, project, setProject, issue, setIssue, commentList, setCommentList, addComment, projectList, setProjectList, addProject}}>
+    <UserContext.Provider value={{user: {nickname, accessToken}, setNickname, setAccessToken, project, setProject, issue, setIssue, commentList, setCommentList, addComment, projectList, setProjectList, addProject, projectId, setProjectId}}>
       {children}
     </UserContext.Provider>
   )

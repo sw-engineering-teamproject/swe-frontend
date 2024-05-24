@@ -19,7 +19,7 @@ const CreateBox: React.FC<LogoutModalProps> = ({ checkOpen, handleClose }) => {
     setReporter(event.target.value);
   };
   const handleCreate = async() => {
-    addProject({title: title, reporter: reporter});
+    // addProject({title: title, reporter: reporter});
 
     await postProject({title, accessToken: user.accessToken});
     handleClose();
