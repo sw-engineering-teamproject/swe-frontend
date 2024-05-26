@@ -5,7 +5,7 @@ import React, { useEffect, useState } from 'react'
 import CreateBox from './CreateBox';
 import IssueBox from './IssueBox';
 import Filter from './Filter';
-import { getIssue } from '@/apis/issue';
+import { getIssueList } from '@/apis/issue';
 
 const Project = () => {
   const {setProject, issueList, setIssueList, user, projectId} = useUser();
@@ -39,7 +39,7 @@ const Project = () => {
 
   useEffect(()=>{
     const fetchData = async () => {
-      const data = await getIssue({accessToken: user.accessToken, projectId});
+      const data = await getIssueList({accessToken: user.accessToken, projectId});
       console.log(data);
       setIssueList(data);
     }
@@ -63,9 +63,9 @@ const Project = () => {
         </Box>
         <CreateBox checkOpen={checkOpen} handleClose={handleLogoutClose}/>
     </Box>
-    
+
     {issueList?.map((issue, index) => (
-              <IssueBox key={index} title={issue.title} id={issue.id}/>
+        <IssueBox key={index} title={issue.title} id={issue.id}/>
       ))
     }
     </Box>

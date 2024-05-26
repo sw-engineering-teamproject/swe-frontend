@@ -4,15 +4,41 @@ import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react'
 import Content from './Content';
 import Sub from './Sub';
-import { createIssue } from '@/apis/issue';
+import { createIssue, getIssue } from '@/apis/issue';
+
+interface User {
+  id: number;
+  name: string;
+};
+
+interface Comment {
+  id: number;
+  commenter: User;
+  content: string;
+  createdAt: string;
+};
+
+interface Issue {
+  id: number;
+  title: string;
+  description: string;
+  reporter: User;
+  assignee: User | null;
+  fixer: User | null;
+  reportedTime: string;
+  status: string;
+  priority: string;
+  comments: Comment[];
+};
 
 const Issue = () => {
-  const {setIssue, user, projectId} = useUser();
+  const {setIssue, user, projectId, issueId} = useUser();
   const router = useRouter();
   const title = router.query.issue;
   const [content, setContent] = useState<string>('');
   const [edit, setEdit] = useState<boolean>(false);
   const [savedContent, setSavedContent] = useState<string>('');
+  const [issueDetail, setIssueDetail] = useState<Issue>();
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setContent(event.target.value);
@@ -26,11 +52,18 @@ const Issue = () => {
   };
 
   useEffect(()=>{
+    const fetchData = async () => {
+      const data = await getIssue({issueId, accessToken: user.accessToken});
+      console.log(data);
+      setIssueDetail(data);
+    }
+
     if(title && typeof title === 'string'){
       setIssue(title);
     }else{
       setEdit(true);
-    }
+    };
+    fetchData();
   },[router.query, setIssue]);
   return (
     <Box sx={containerStyle}>
