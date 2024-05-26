@@ -5,9 +5,10 @@ import React, { useEffect, useState } from 'react'
 import CreateBox from './CreateBox';
 import IssueBox from './IssueBox';
 import Filter from './Filter';
+import { getIssue } from '@/apis/issue';
 
 const Project = () => {
-  const {setProject} = useUser();
+  const {setProject, issueList, setIssueList, user, projectId} = useUser();
   const router = useRouter();
   const title = router.query.title;
   const [search, setSearch] = useState<string>('');
@@ -34,7 +35,17 @@ const Project = () => {
     if(title && typeof title === 'string'){
       setProject(title);
     }
-  },[router.query, setProject])
+  },[router.query, setProject]);
+
+  useEffect(()=>{
+    const fetchData = async () => {
+      const data = await getIssue({accessToken: user.accessToken, projectId});
+      console.log(data);
+      setIssueList(data);
+    }
+    fetchData();
+  }, [user.accessToken, checkOpen]);
+
   return (
     <Box sx={containerStyle}>
       <Box sx={searchBoxStyle}>
@@ -52,13 +63,11 @@ const Project = () => {
         </Box>
         <CreateBox checkOpen={checkOpen} handleClose={handleLogoutClose}/>
     </Box>
-
-    <IssueBox title={'Issue_1'}/>
-    <IssueBox title={'Issue_2'}/>
-    {/* {issueList?.map((issue, index) => (
-              <IssueBox key={index} title={project.title} id={project.id}/>
+    
+    {issueList?.map((issue, index) => (
+              <IssueBox key={index} title={issue.title} id={issue.id}/>
       ))
-    } */}
+    }
     </Box>
   )
 }

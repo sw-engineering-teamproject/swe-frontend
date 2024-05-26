@@ -4,9 +4,10 @@ import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react'
 import Content from './Content';
 import Sub from './Sub';
+import { createIssue } from '@/apis/issue';
 
 const Issue = () => {
-  const {setIssue} = useUser();
+  const {setIssue, user, projectId} = useUser();
   const router = useRouter();
   const title = router.query.issue;
   const [content, setContent] = useState<string>('');
@@ -17,9 +18,10 @@ const Issue = () => {
     setContent(event.target.value);
   };
 
-  const handleSave = () => {
+  const handleSave = async () => {
     setEdit(!edit);
     setSavedContent(content);
+    const response = await createIssue({title: content, accessToken: user.accessToken, projectId})
     router.push(`/issue?issue=${content}`);
   };
 

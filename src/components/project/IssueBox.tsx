@@ -3,11 +3,12 @@ import { Box } from '@mui/material'
 import { useRouter } from 'next/router'
 import React from 'react'
 
-const IssueBox = ({title}: {title: string}) => {
+const IssueBox = ({title, id}: {title: string, id: number}) => {
   const router = useRouter();
-  const {project, setIssue} = useUser();
+  const {project, setIssue, setIssueId} = useUser();
   const handleClick = () => {
     setIssue(title);
+    setIssueId(id);
     router.push(`/issue?issue=${title}`);
   }
   return (
