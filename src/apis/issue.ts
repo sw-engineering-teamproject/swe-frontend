@@ -30,7 +30,7 @@ export const createIssue = async ({title, accessToken, projectId} : {title: stri
           Authorization: `Bearer ${accessToken}`
         }
       });
-    return response;
+    return response.data;
   }catch(error){
     console.error(error);
   }
@@ -44,6 +44,25 @@ export const getIssue = async ({issueId, accessToken}:{issueId: number, accessTo
           Authorization: `Bearer ${accessToken}`
         }
       });
+    return response.data;
+
+  }catch(error){
+    console.error(error);
+  }
+};
+
+export const editIssueDescription = async ({issueId, description, accessToken}:{issueId: number, description: string, accessToken: string}) => {
+  try{
+    const response = await axios.post(`${baseURL}/issues/${issueId}/description`, {
+      newDescription: description,
+    },
+    {
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        }
+      });
+    console.log(description);
+    console.log(response);
     return response.data;
 
   }catch(error){

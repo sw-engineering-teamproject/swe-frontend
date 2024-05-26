@@ -32,7 +32,7 @@ interface Issue {
 };
 
 const Issue = () => {
-  const {setIssue, user, projectId, issueId} = useUser();
+  const {setIssue, user, projectId, issueId, setIssueId} = useUser();
   const router = useRouter();
   const title = router.query.issue;
   const [content, setContent] = useState<string>('');
@@ -47,7 +47,8 @@ const Issue = () => {
   const handleSave = async () => {
     setEdit(!edit);
     setSavedContent(content);
-    const response = await createIssue({title: content, accessToken: user.accessToken, projectId})
+    const response = await createIssue({title: content, accessToken: user.accessToken, projectId});
+    setIssueId(response.id);
     router.push(`/issue?issue=${content}`);
   };
 
@@ -96,7 +97,7 @@ const Issue = () => {
       }
       <Box sx={{width: '80%', height: '1px', bgcolor: 'grey',}}/>
       <Box sx={issueContentStyle}>
-        <Content/>
+        <Content description={issueDetail?.description || ""}/>
         <Sub/>
       </Box>
     </Box>
