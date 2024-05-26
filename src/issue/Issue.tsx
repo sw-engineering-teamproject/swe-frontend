@@ -16,7 +16,7 @@ interface Comment {
   commenter: User;
   content: string;
   createdAt: string;
-};
+}
 
 interface Issue {
   id: number;
@@ -32,13 +32,13 @@ interface Issue {
 };
 
 const Issue = () => {
-  const {setIssue, user, projectId, issueId, setIssueId} = useUser();
+  const {setIssue, user, projectId, issueId, setIssueId, setCommentList} = useUser();
   const router = useRouter();
   const title = router.query.issue;
   const [content, setContent] = useState<string>('');
   const [edit, setEdit] = useState<boolean>(false);
   const [savedContent, setSavedContent] = useState<string>('');
-  const [issueDetail, setIssueDetail] = useState<Issue>();
+  const [issueDetail, setIssueDetail] = useState<Issue | null>(null);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setContent(event.target.value);
@@ -57,6 +57,9 @@ const Issue = () => {
       const data = await getIssue({issueId, accessToken: user.accessToken});
       console.log(data);
       setIssueDetail(data);
+      if(data.comments){
+        setCommentList(data.comments);
+      }
     }
 
     if(title && typeof title === 'string'){

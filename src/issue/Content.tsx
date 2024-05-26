@@ -76,7 +76,7 @@ const Content: React.FC<ContentProps> = ({ description }) => {
         </>
       )}
       {commentList.map((comment, index) => (
-        <Comment key={index} commentContent={comment.commentContent} time={comment.time} name={comment.name} />
+        <Comment key={index} commentContent={comment.content} time={comment.createdAt} name={comment.commenter.name} />
       ))}
       <CommentWrite />
     </Box>

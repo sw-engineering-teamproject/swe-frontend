@@ -1,11 +1,17 @@
 import { Project } from "next/dist/build/swc";
 import { Dispatch, ReactNode, SetStateAction, createContext, useEffect, useState } from "react";
 
-export interface CommentProps {
-  commentContent: string;
-  time?: string;
-  name?: string;
-};
+interface User {
+  id: number;
+  name: string;
+}
+
+interface CommentProps {
+  id: number;
+  commenter: User;
+  content: string;
+  createdAt: string;
+}
 
 export interface ProjectProps {
   id: number;
@@ -66,7 +72,8 @@ const contextDefaultValue: UserContextValues = {
   setIssue: () => {},
   issueId: -1,
   setIssueId: () => {},
-  commentList: [{commentContent: 'hi hi', time: '23,07.17.', name: '영은',}, {commentContent: 'ki ki ku ku', time: '23,12.25.', name: '영은',}],
+  // commentList: [{commentContent: 'hi hi', time: '23,07.17.', name: '영은',}, {commentContent: 'ki ki ku ku', time: '23,12.25.', name: '영은',}],
+  commentList: [],
   setCommentList: () => {},
   addComment: () => {},
   // projectList: [{title: 'project_5', reporter: 'Junye'}, {title: 'project_2', reporter: 'hihi'}],
