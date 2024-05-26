@@ -55,6 +55,10 @@ const Project = () => {
 
     <IssueBox title={'Issue_1'}/>
     <IssueBox title={'Issue_2'}/>
+    {/* {issueList?.map((issue, index) => (
+              <IssueBox key={index} title={project.title} id={project.id}/>
+      ))
+    } */}
     </Box>
   )
 }
