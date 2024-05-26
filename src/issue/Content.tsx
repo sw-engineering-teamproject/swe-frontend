@@ -15,7 +15,6 @@ const Content: React.FC<ContentProps> = ({ description }) => {
   const [content, setContent] = useState<string>(description);
   const [savedContent, setSavedContent] = useState<string>(description);
   const { issueId, user } = useUser();
-  const commentContent = "ㅎㅇㅎㅇ";
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setContent(event.target.value);
@@ -31,14 +30,13 @@ const Content: React.FC<ContentProps> = ({ description }) => {
   };
 
   useEffect(() => {
-    // 컴포넌트가 마운트될 때 description을 초기 상태로 설정
     setContent(description);
     setSavedContent(description);
   }, [description]);
 
   return (
     <Box sx={{ width: '100%', mx: 'auto' }}>
-      {edit && (
+      {edit ? (
         <>
           <TextField
             label="Write something"
@@ -59,12 +57,9 @@ const Content: React.FC<ContentProps> = ({ description }) => {
             Save
           </Button>
         </>
-      )}
-      {!edit && (
+      ) : (
         <>
-          <Box>
-            {savedContent}
-          </Box>
+          <Box>{savedContent}</Box>
           <Button
             variant="contained"
             color="primary"

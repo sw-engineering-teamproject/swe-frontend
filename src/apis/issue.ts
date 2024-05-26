@@ -61,10 +61,25 @@ export const editIssueDescription = async ({issueId, description, accessToken}:{
           Authorization: `Bearer ${accessToken}`
         }
       });
-    console.log(description);
-    console.log(response);
     return response.data;
 
+  }catch(error){
+    console.error(error);
+  }
+};
+
+export const addIssueComment = async ({issueId, accessToken, content}: {issueId: number, accessToken: string, content: string}) => {
+  try{
+    const response = await axios.post(`${baseURL}/issues/${issueId}/comments`, 
+    {
+      content: content,
+    },
+    {
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        }
+      });
+    return response.data;
   }catch(error){
     console.error(error);
   }

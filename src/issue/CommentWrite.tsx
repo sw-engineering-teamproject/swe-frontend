@@ -2,9 +2,11 @@ import { Box, Button, TextField } from '@mui/material'
 import React, { useState } from 'react'
 import Comment from './Comment';
 import { useUser } from '@/hook/useUser';
+import { addIssueComment, getIssue } from '@/apis/issue';
+import { formatDate } from '@/util/convertToTime';
 
 const CommentWrite = () => {
-  const {addComment} = useUser();
+  const {addComment, issueId, user, setCommentList, commentList } = useUser();
   const [edit, setEdit] = useState<boolean>(true);
   const [content, setContent] = useState<string>('');
   const [savedContent, setSavedContent] = useState<string>('');
@@ -13,10 +15,18 @@ const CommentWrite = () => {
       setContent(event.target.value);
     };
   
-    const handleSave = () => {
+    const handleSave = async () => {
       setEdit(!edit);
       setSavedContent(content);
-      addComment({commentContent: content, name: '쿠쿠', time: '1107'});
+      const response = await addIssueComment({issueId, accessToken: user.accessToken, content});
+      const created = new Date().toISOString();
+      const newComment = {
+        id: response.id,
+        commenter: { id: 1, name: user.nickname },
+        content: content,
+        createdAt: formatDate(created),
+      };
+      addComment(newComment);
       setContent('');
     };
   
