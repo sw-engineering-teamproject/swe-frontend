@@ -16,7 +16,7 @@ interface Comment {
   commenter: User;
   content: string;
   createdAt: string;
-}
+};
 
 interface Issue {
   id: number;
@@ -101,7 +101,7 @@ const Issue = () => {
       <Box sx={{width: '80%', height: '1px', bgcolor: 'grey',}}/>
       <Box sx={issueContentStyle}>
         <Content description={issueDetail?.description || ""}/>
-        <Sub/>
+        <Sub issueContent={issueDetail}/>
       </Box>
     </Box>
   )
