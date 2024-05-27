@@ -101,4 +101,22 @@ export const getIssuePriorityList = async () => {
   }catch(error){
     console.error(error);
   }
-}
+};
+
+export const editIssuePriority = async ({issueId, priority, accessToken}: {issueId: number, priority: string, accessToken: string}) => {
+  try{
+    const response = await axios.post(`${baseURL}/issues/${issueId}/priority`, 
+    {
+      priority: priority,
+    },
+    {
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        }
+      });
+    console.log(response);
+    return response.data;
+  }catch(error){
+    console.error(error);
+  }
+};

@@ -41,7 +41,7 @@ const Sub = ({ issueContent }: { issueContent: Issue | null }) => {
     const fetchStatusList = async () => {
       try {
         const statusData = await getIssueStatusList();
-        const formattedStatusData = statusData.map((status: {statusName: string}) => ({ infoName: status.statusName }));
+        const formattedStatusData = statusData.map((status: { statusName: string }) => ({ infoName: status.statusName }));
         setStatusList(formattedStatusData || []);
       } catch (error) {
         console.error(error);
@@ -56,8 +56,8 @@ const Sub = ({ issueContent }: { issueContent: Issue | null }) => {
       try {
         const rankData = await getIssuePriorityList();
         console.log(rankData);
-        const formattedStatusData = rankData.map((priority: {priorityName: string}) => ({ infoName: priority.priorityName }));
-        setRankList(formattedStatusData || []);
+        const formattedRankData = rankData.map((priority: { priorityName: string }) => ({ infoName: priority.priorityName }));
+        setRankList(formattedRankData || []);
       } catch (error) {
         console.error(error);
       }
@@ -72,15 +72,27 @@ const Sub = ({ issueContent }: { issueContent: Issue | null }) => {
     <Box sx={subStyle}>
       <Box sx={containerStyle}>
         Assignee
-        <SelectPerson infoList={assigneeList} label="Assignee" />
+        <SelectPerson
+          infoList={assigneeList}
+          label="Assignee"
+          defaultValue={issueContent?.assignee?.name || ''}
+        />
       </Box>
       <Box sx={containerStyle}>
         Status
-        <SelectPerson infoList={statusList} label="Status" />
+        <SelectPerson
+          infoList={statusList}
+          label="Status"
+          defaultValue={issueContent?.status || ''}
+        />
       </Box>
       <Box sx={containerStyle}>
         Rank
-        <SelectPerson infoList={rankList} label="Rank" />
+        <SelectPerson
+          infoList={rankList}
+          label="Rank"
+          defaultValue={issueContent?.priority || ''}
+        />
       </Box>
       <Box sx={containerStyle}>
         Fixer

@@ -1,5 +1,7 @@
+import { editIssuePriority } from '@/apis/issue';
+import { useUser } from '@/hook/useUser';
 import { Box, FormControl, InputLabel, MenuItem, Select, SelectChangeEvent } from '@mui/material';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 interface Info {
   infoName: string;
@@ -8,13 +10,21 @@ interface Info {
 interface SelectPersonProps {
   infoList: Info[];
   label: string;
+  defaultValue: string;
 }
 
-const SelectPerson = ({ infoList, label }: SelectPersonProps) => {
-  const [selectedValue, setSelectedValue] = useState<string>('');
+const SelectPerson = ({ infoList, label, defaultValue }: SelectPersonProps) => {
+  const [selectedValue, setSelectedValue] = useState<string>(defaultValue);
+  const { user, issueId } = useUser();
 
-  const handleChange = (event: SelectChangeEvent) => {
-    setSelectedValue(event.target.value);
+  useEffect(() => {
+    setSelectedValue(defaultValue);
+  }, [defaultValue]);
+
+  const handleChange = async (event: SelectChangeEvent) => {
+    const value = event.target.value;
+    setSelectedValue(value);
+    await editIssuePriority({ issueId, priority: value, accessToken: user.accessToken });
   };
 
   return (
