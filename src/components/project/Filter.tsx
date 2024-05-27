@@ -1,53 +1,35 @@
-import { Box, FormControl, InputLabel, MenuItem, Select, SelectChangeEvent } from '@mui/material'
-import React, { useState } from 'react'
+import { Box, FormControl, InputLabel, MenuItem, Select, SelectChangeEvent } from '@mui/material';
+import React, { useState } from 'react';
 
-const Filter = () => {
-  const [filterOpen, setFilterOpen] = useState<boolean>(false);
+interface FilterProps {
+  onFilterChange: (filter: string) => void;
+}
 
-  const handleFilterOpen = () => {
-    setFilterOpen(!filterOpen);
-  };
-  const [age, setAge] = React.useState('');
+const Filter = ({ onFilterChange }: FilterProps) => {
+  const [filter, setFilter] = useState<string>('');
 
-  const handleChange = (event: SelectChangeEvent) => {
-    setAge(event.target.value);
+  const handleChange = (event: SelectChangeEvent<string>) => {
+    const selectedFilter = event.target.value;
+    setFilter(selectedFilter);
+    onFilterChange(selectedFilter);
   };
 
   return (
-    <div>
-      <FormControl sx={{ m: 1, minWidth: 120 }}>
-        <InputLabel id="select-helper-label">Filter</InputLabel>
-        <Select
-          labelId="select-helper-label"
-          id="select-helper"
-          value={age}
-          label="Age"
-          onChange={handleChange}
-        >
-          <MenuItem value="">
-            <em>None</em>
-          </MenuItem>
-          <MenuItem value={10}>Assignee</MenuItem>
-          <MenuItem value={20}>Status</MenuItem>
-        </Select>
-        {/* <FormHelperText>With label + helper text</FormHelperText> */}
-      </FormControl>
-    </div>
-  )
-}
+    <FormControl sx={{ m: 1, minWidth: 120 }}>
+      <InputLabel id="select-helper-label">Filter</InputLabel>
+      <Select
+        labelId="select-helper-label"
+        id="select-helper"
+        value={filter}
+        label="Filter"
+        onChange={handleChange}
+      >
+        <MenuItem value={'assignee'}>Assignee</MenuItem>
+        <MenuItem value={'reporter'}>Reporter</MenuItem>
+        <MenuItem value={'issueStatus'}>Issue Status</MenuItem>
+      </Select>
+    </FormControl>
+  );
+};
 
 export default Filter;
-
-const filterStyle = {
-  width: '60px',
-  height: '40px',
-  bgcolor: 'white',
-  color: 'black',
-  borderRadius: '20px',
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  fontWeight: 'bold',
-  cursor: 'pointer',
-  margin: '10px',
-};

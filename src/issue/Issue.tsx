@@ -16,7 +16,7 @@ interface Comment {
   commenter: User;
   content: string;
   createdAt: string;
-};
+}
 
 interface Issue {
   id: number;
