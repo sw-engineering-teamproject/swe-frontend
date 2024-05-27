@@ -83,4 +83,13 @@ export const addIssueComment = async ({issueId, accessToken, content}: {issueId:
   }catch(error){
     console.error(error);
   }
+};
+
+export const getIssueStatusList = async () => {
+  try{
+    const response = await axios.get(`${baseURL}/issues/status`);
+    return response.data;
+  }catch(error){
+    console.error(error);
+  }
 }
