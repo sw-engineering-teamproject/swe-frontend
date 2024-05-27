@@ -92,4 +92,13 @@ export const getIssueStatusList = async () => {
   }catch(error){
     console.error(error);
   }
+};
+
+export const getIssuePriorityList = async () => {
+  try{
+    const response = await axios.get(`${baseURL}/issues/priority`);
+    return response.data;
+  }catch(error){
+    console.error(error);
+  }
 }

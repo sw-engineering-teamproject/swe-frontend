@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Box } from '@mui/material';
 import SelectPerson from './SelectPerson';
-import { getIssueStatusList } from '@/apis/issue';
+import { getIssuePriorityList, getIssueStatusList } from '@/apis/issue';
 
 interface User {
   id: number;
@@ -53,7 +53,14 @@ const Sub = ({ issueContent }: { issueContent: Issue | null }) => {
     };
 
     const fetchRankList = async () => {
-      // 여기에 API 호출을 통해 rank 목록을 가져오는 로직을 추가하세요.
+      try {
+        const rankData = await getIssuePriorityList();
+        console.log(rankData);
+        const formattedStatusData = rankData.map((priority: {priorityName: string}) => ({ infoName: priority.priorityName }));
+        setRankList(formattedStatusData || []);
+      } catch (error) {
+        console.error(error);
+      }
     };
 
     fetchStatusList();
