@@ -1,4 +1,4 @@
-import { editIssuePriority } from '@/apis/issue';
+import { editIssueAssignee, editIssuePriority, editIssueStatus } from '@/apis/issue';
 import { useUser } from '@/hook/useUser';
 import { Box, FormControl, InputLabel, MenuItem, Select, SelectChangeEvent } from '@mui/material';
 import React, { useState, useEffect } from 'react';
@@ -24,7 +24,13 @@ const SelectPerson = ({ infoList, label, defaultValue }: SelectPersonProps) => {
   const handleChange = async (event: SelectChangeEvent) => {
     const value = event.target.value;
     setSelectedValue(value);
-    await editIssuePriority({ issueId, priority: value, accessToken: user.accessToken });
+    if(label === "Rank"){
+      await editIssuePriority({ issueId, priority: value, accessToken: user.accessToken });
+    }else if(label === "Status"){
+      await editIssueStatus({ issueId, status: value, accessToken: user.accessToken });
+    }else if(label === "Assignee"){
+      await editIssueAssignee({ issueId, assignee: value, accessToken: user.accessToken });
+    }
   };
 
   return (

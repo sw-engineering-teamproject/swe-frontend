@@ -114,7 +114,40 @@ export const editIssuePriority = async ({issueId, priority, accessToken}: {issue
           Authorization: `Bearer ${accessToken}`
         }
       });
-    console.log(response);
+    return response.data;
+  }catch(error){
+    console.error(error);
+  }
+};
+
+export const editIssueStatus = async ({issueId, status, accessToken}: {issueId: number, status: string, accessToken: string}) => {
+  try{
+    const response = await axios.post(`${baseURL}/issues/${issueId}/status`, 
+    {
+      status: status,
+    },
+    {
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        }
+      });
+    return response.data;
+  }catch(error){
+    console.error(error);
+  }
+};
+
+export const editIssueAssignee = async ({issueId, assignee, accessToken}: {issueId: number, assignee: string, accessToken: string}) => {
+  try{
+    const response = await axios.post(`${baseURL}/issues/${issueId}/assignee`, 
+    {
+      assigneeId: assignee,
+    },
+    {
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        }
+      });
     return response.data;
   }catch(error){
     console.error(error);
