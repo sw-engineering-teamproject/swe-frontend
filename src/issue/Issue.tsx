@@ -57,7 +57,7 @@ const Issue = () => {
       const data = await getIssue({issueId, accessToken: user.accessToken});
       console.log(data);
       setIssueDetail(data);
-      if(data.comments){
+      if(data && data.comments){
         setCommentList(data.comments);
       }
     }
