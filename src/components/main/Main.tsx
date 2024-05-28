@@ -1,5 +1,5 @@
-import { Box, CardMedia, TextField } from '@mui/material'
-import React, { useEffect, useState } from 'react'
+import { Box, CardMedia, TextField } from '@mui/material';
+import React, { useEffect, useState } from 'react';
 import ProjectBox from './ProjectBox';
 import { useRouter } from 'next/router';
 import { useUser } from '@/hook/useUser';
@@ -7,62 +7,57 @@ import CreateBox from './CreateBox';
 import { getProject } from '@/apis/project';
 
 const Main = () => {
-  const {projectList, user, setProjectList} = useUser();
+  const { projectList, user, setProjectList } = useUser();
   const router = useRouter();
   const [search, setSearch] = useState<string>('');
   const [checkOpen, setCheckOpen] = useState<boolean>(false);
+
   const handleIdChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearch(event.target.value);
   };
 
-  const handleSearch = () => {
-
-  };
+  const handleSearch = () => {};
 
   const openCreateProject = () => {
     setCheckOpen(true);
-  }
+  };
 
   const handleLogoutClose = () => {
     setCheckOpen(false);
   };
 
-  useEffect(()=>{
+  useEffect(() => {
     const fetchData = async () => {
-      const data = await getProject({accessToken: user.accessToken});
+      const data = await getProject({ accessToken: user.accessToken });
       setProjectList(data);
-    }
+    };
     fetchData();
   }, [user.accessToken, checkOpen]);
 
   return (
     <Box sx={containerStyle}>
-    <Box sx={searchBoxStyle}>
-      {
-        user.accessToken ?
-        <>
-        <Box sx={createStyle} onClick={openCreateProject}>
-          Create
-        </Box>
-        <CreateBox checkOpen={checkOpen} handleClose={handleLogoutClose}/>
-        </>
-        :
-        ''
-      }
+      <Box sx={searchBoxStyle}>
+        {user.accessToken ? (
+          <>
+            <Box sx={createStyle} onClick={openCreateProject}>
+              Create
+            </Box>
+            <CreateBox checkOpen={checkOpen} handleClose={handleLogoutClose} />
+          </>
+        ) : (
+          ''
+        )}
+      </Box>
+      {user.accessToken ? (
+        projectList?.map((project, index) => (
+          <ProjectBox key={index} title={project.title} id={project.id} />
+        ))
+      ) : (
+        <Box sx={signInStyle}>Sign In{'\n'}{'\n'} Please Click Profile Button</Box>
+      )}
     </Box>
-        {
-          user.accessToken ?
-          
-          projectList?.map((project, index) => (
-              <ProjectBox key={index} title={project.title} id={project.id}/>
-          ))
-          :
-          'Sign In'
-        }
-
-    </Box>
-  )
-}
+  );
+};
 
 export default Main;
 
@@ -85,7 +80,6 @@ const titleStyle = {
   justifyContent: 'center',
   alignItems: 'center',
   textAlign: 'center',
-
   fontFamily: 'Inter',
   fontSize: '1.7rem',
   fontStyle: 'normal',
@@ -116,7 +110,6 @@ const textFieldStyle = {
   },
   '& .MuiInputBase-input': {
     padding: '10px',
-
   },
   '& .MuiInputLabel-root': {
     transform: 'translate(14px, 14px) scale(1)',
@@ -151,4 +144,9 @@ const createStyle = {
   justifyContent: 'center',
   fontWeight: 'bold',
   cursor: 'pointer',
+};
+
+const signInStyle = {
+  whiteSpace: 'pre-line',
+  textAlign: 'center',
 };
