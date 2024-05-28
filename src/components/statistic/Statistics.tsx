@@ -1,14 +1,26 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Grid, Button } from '@mui/material';
+import { Box, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/material';
 import { useUser } from '@/hook/useUser';
 import { getStatisticsAssignee, getStatisticsDay, getStatisticsMonth, getStatisticsPriority, getStatisticsReporter, getStatisticsStatus } from '@/apis/statistic';
 import Buttons from './Buttons';
-import { extractMonth, extractNickname } from '@/util/convertToColumn';
 
 interface StatisticsData {
   column: string;
   count: number;
 }
+
+const extractMonth = (dateString: string): string => {
+  const parts = dateString.split('-');
+  if (parts.length !== 3) {
+    throw new Error('Invalid date format. Expected format: YYYY-MM-DD');
+  }
+  return parts[1];
+};
+
+const extractNickname = (userString: string): string => {
+  const match = userString.match(/nickname=(.*?),/);
+  return match ? match[1] : userString;
+};
 
 const Statistics = () => {
   const { user, projectId } = useUser();
@@ -55,12 +67,12 @@ const Statistics = () => {
 
   return (
     <Box sx={containerStyle}>
-      <Buttons setCurrentButton = {setCurrentButton}/>
+      <Buttons setCurrentButton={setCurrentButton} />
       <TableContainer component={Paper} sx={tableContainerStyle}>
         <Table>
-          <TableHead>
+          <TableHead sx={tableHeadStyle}>
             <TableRow>
-              <TableCell>Column</TableCell>
+              <TableCell>{currentButton}</TableCell>
               <TableCell>Count</TableCell>
             </TableRow>
           </TableHead>
@@ -93,4 +105,8 @@ const containerStyle = {
 
 const tableContainerStyle = {
   width: '80%',
+};
+
+const tableHeadStyle = {
+  bgcolor: '#f0f0ff', // 원하는 색상으로 변경
 };
