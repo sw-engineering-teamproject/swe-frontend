@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Box } from '@mui/material';
 import SelectPerson from './SelectPerson';
-import { getIssuePriorityList, getIssueStatusList, getUsers } from '@/apis/issue';
+import { getIssuePriorityList, getIssueStatusList, getUsers, getIssue } from '@/apis/issue';
 import { useUser } from '@/hook/useUser';
 
 interface User {
@@ -34,11 +34,14 @@ interface Info {
   userId?: number;
 }
 
-const Sub = ({ issueContent }: { issueContent: Issue | null }) => {
-  const {user} = useUser();
+const Sub = ({ issueContent, onReload }: { issueContent: Issue | null, onReload: () => void }) => {
+  const { user } = useUser();
   const [statusList, setStatusList] = useState<Info[]>([]);
   const [assigneeList, setAssigneeList] = useState<Info[]>([]);
   const [rankList, setRankList] = useState<Info[]>([]);
+  const [defaultAssignee, setDefaultAssignee] = useState<string>('');
+  const [defaultStatus, setDefaultStatus] = useState<string>('');
+  const [defaultRank, setDefaultRank] = useState<string>('');
 
   useEffect(() => {
     const fetchStatusList = async () => {
@@ -53,7 +56,7 @@ const Sub = ({ issueContent }: { issueContent: Issue | null }) => {
 
     const fetchAssigneeList = async () => {
       try {
-        const assigneeData = await getUsers({accessToken: user.accessToken});
+        const assigneeData = await getUsers({ accessToken: user.accessToken });
         const formattedAssigneeData = assigneeData.map((assignee: { id: number, name: string }) => ({ infoName: assignee.name, userId: assignee.id }));
         setAssigneeList(formattedAssigneeData || []);
       } catch (error) {
@@ -76,6 +79,12 @@ const Sub = ({ issueContent }: { issueContent: Issue | null }) => {
     fetchRankList();
   }, [user.accessToken]);
 
+  useEffect(() => {
+    setDefaultAssignee(issueContent?.assignee?.name || '');
+    setDefaultStatus(issueContent?.status || '');
+    setDefaultRank(issueContent?.priority || '');
+  }, [issueContent]);
+
   return (
     <Box sx={subStyle}>
       <Box sx={containerStyle}>
@@ -83,7 +92,8 @@ const Sub = ({ issueContent }: { issueContent: Issue | null }) => {
         <SelectPerson
           infoList={assigneeList}
           label="Assignee"
-          defaultValue={issueContent?.assignee?.name || ''}
+          defaultValue={defaultAssignee}
+          onChange={onReload} // onChange 콜백 전달
         />
       </Box>
       <Box sx={containerStyle}>
@@ -91,7 +101,8 @@ const Sub = ({ issueContent }: { issueContent: Issue | null }) => {
         <SelectPerson
           infoList={statusList}
           label="Status"
-          defaultValue={issueContent?.status || ''}
+          defaultValue={defaultStatus}
+          onChange={onReload} // onChange 콜백 전달
         />
       </Box>
       <Box sx={containerStyle}>
@@ -99,7 +110,8 @@ const Sub = ({ issueContent }: { issueContent: Issue | null }) => {
         <SelectPerson
           infoList={rankList}
           label="Rank"
-          defaultValue={issueContent?.priority || ''}
+          defaultValue={defaultRank}
+          onChange={onReload} // onChange 콜백 전달
         />
       </Box>
       <Box sx={containerStyle}>
