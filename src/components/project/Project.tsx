@@ -58,7 +58,7 @@ const Project = () => {
 
   const handleFilterChange = (selectedFilter: string) => {
     setFilter(selectedFilter);
-    setSearchContent(''); // 필터 변경 시 검색 내용을 초기화
+    setSearchContent('');
 
     if (selectedFilter === 'issueStatus') {
       fetchStatusList();

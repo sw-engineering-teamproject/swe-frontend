@@ -1,5 +1,6 @@
 import { editIssueAssignee, editIssuePriority, editIssueStatus } from '@/apis/issue';
 import { useUser } from '@/hook/useUser';
+import { controlError } from '@/util/controlError';
 import { Box, FormControl, InputLabel, MenuItem, Select, SelectChangeEvent } from '@mui/material';
 import React, { useState, useEffect } from 'react';
 
@@ -13,16 +14,17 @@ interface SelectPersonProps {
   label: string;
   defaultValue: string;
   userId?: number;
-  onChange?: () => void; // 새로운 콜백 프로퍼티 추가
+  onChange?: () => void;
+  onError?: (message: string) => void;
 }
 
-const SelectPerson = ({ infoList, label, defaultValue, userId, onChange }: SelectPersonProps) => {
+const SelectPerson = ({ infoList, label, defaultValue, userId, onChange, onError }: SelectPersonProps) => {
   const [selectedValue, setSelectedValue] = useState<string>(defaultValue);
   const { user, issueId } = useUser();
 
   useEffect(() => {
     setSelectedValue(defaultValue);
-  }, [defaultValue]);
+  }, [defaultValue, onError]);
 
   const handleChange = async (event: SelectChangeEvent) => {
     const value = event.target.value;
@@ -30,16 +32,28 @@ const SelectPerson = ({ infoList, label, defaultValue, userId, onChange }: Selec
     
     const selectedInfo = infoList.find(info => info.infoName === value);
 
-    if (label === "Rank") {
-      await editIssuePriority({ issueId, priority: value, accessToken: user.accessToken });
-    } else if (label === "Status") {
-      await editIssueStatus({ issueId, status: value, accessToken: user.accessToken });
-    } else if (label === "Assignee" && selectedInfo?.userId) {
-      await editIssueAssignee({ issueId, assignee: selectedInfo.userId, accessToken: user.accessToken });
-    }
-    
-    if (onChange) {
-      onChange();
+    try {
+      if (label === "Rank") {
+        await editIssuePriority({ issueId, priority: value, accessToken: user.accessToken });
+      } else if (label === "Status") {
+        await editIssueStatus({ issueId, status: value, accessToken: user.accessToken });
+      } else if (label === "Assignee" && selectedInfo?.userId) {
+        await editIssueAssignee({ issueId, assignee: selectedInfo.userId, accessToken: user.accessToken });
+      }
+
+      if (onChange) {
+        onChange();
+      }
+    } catch (error: any) {
+      let errorMessage = 'An unknown error occurred';
+      if (error.response) {
+        console.log(error.response);
+        errorMessage = controlError(error.response.data);
+      }
+      console.error(errorMessage);
+      if (onError) {
+        onError(errorMessage);
+      }
     }
   };
 

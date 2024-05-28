@@ -4,6 +4,7 @@ import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 import Content from './Content';
 import Sub from './Sub';
+import AuthorityBox from './AuthorityBox';
 import { createIssue, getIssue } from '@/apis/issue';
 
 interface User {
@@ -38,6 +39,8 @@ const IssuePage = () => {
   const [content, setContent] = useState<string>('');
   const [edit, setEdit] = useState<boolean>(!title);
   const [issueDetail, setIssueDetail] = useState<Issue | null>(null);
+  const [checkOpenCantCreate, setCheckOpenCantCreate] = useState<boolean>(false);
+  const [errorMessage, setErrorMessage] = useState<string>('');
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setContent(event.target.value);
@@ -58,6 +61,15 @@ const IssuePage = () => {
         setCommentList(data.comments);
       }
     }
+  };
+
+  const handleCantCreateClose = () => {
+    setCheckOpenCantCreate(false);
+  };
+
+  const handleCantCreateOpen = (message: string) => {
+    setErrorMessage(message);
+    setCheckOpenCantCreate(true);
   };
 
   useEffect(() => {
@@ -95,8 +107,9 @@ const IssuePage = () => {
       <Box sx={{ width: '80%', height: '1px', bgcolor: 'grey' }} />
       <Box sx={issueContentStyle}>
         <Content description={issueDetail?.description || ''} />
-        <Sub issueContent={issueDetail} onReload={fetchData} />
+        <Sub issueContent={issueDetail} onReload={fetchData} onError={handleCantCreateOpen} />
       </Box>
+      <AuthorityBox checkOpen={checkOpenCantCreate} handleClose={handleCantCreateClose} errorMessage={errorMessage} />
     </Box>
   );
 };

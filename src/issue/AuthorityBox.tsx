@@ -3,16 +3,16 @@ import React from 'react'
 interface LogoutModalProps {
   checkOpen: boolean;
   handleClose: () => void;
-  isDuplicated: boolean;
+  errorMessage: string;
 }
 
-const CanSignUpBox: React.FC<LogoutModalProps> = ({ checkOpen, handleClose, isDuplicated }) => {
+const AuthorityBox: React.FC<LogoutModalProps> = ({ checkOpen, handleClose, errorMessage }) => {
     return (
       <Dialog open={checkOpen} onClose={handleClose}>
-        <DialogTitle>{"닉네임 중복 확인 필요"}</DialogTitle>
+        <DialogTitle>{"Error"}</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            닉네임 중복 확인해주세요
+            {errorMessage}
           </DialogContentText>
         </DialogContent>
         <DialogActions>
@@ -23,4 +23,4 @@ const CanSignUpBox: React.FC<LogoutModalProps> = ({ checkOpen, handleClose, isDu
   }
   
 
-export default CanSignUpBox;
+export default AuthorityBox;

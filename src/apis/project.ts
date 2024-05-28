@@ -30,7 +30,7 @@ export const getProject = async ({accessToken}:{accessToken: string}) => {
     return response.data;
 
   }catch(error){
-    console.error(error);
+    throw error;
   }
 };
 
@@ -45,6 +45,6 @@ export const getSearch = async ({accessToken, projectId, condition, conditionVal
     return response.data;
 
   }catch(error){
-    console.error(error);
+    throw error;
   }
 };

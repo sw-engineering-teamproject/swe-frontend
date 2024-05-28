@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Box } from '@mui/material';
 import SelectPerson from './SelectPerson';
-import { getIssuePriorityList, getIssueStatusList, getUsers, getIssue } from '@/apis/issue';
+import { getIssuePriorityList, getIssueStatusList, getUsers } from '@/apis/issue';
 import { useUser } from '@/hook/useUser';
 
 interface User {
@@ -34,7 +34,7 @@ interface Info {
   userId?: number;
 }
 
-const Sub = ({ issueContent, onReload }: { issueContent: Issue | null, onReload: () => void }) => {
+const Sub = ({ issueContent, onReload, onError }: { issueContent: Issue | null, onReload: () => void, onError: (message: string) => void }) => {
   const { user } = useUser();
   const [statusList, setStatusList] = useState<Info[]>([]);
   const [assigneeList, setAssigneeList] = useState<Info[]>([]);
@@ -93,7 +93,8 @@ const Sub = ({ issueContent, onReload }: { issueContent: Issue | null, onReload:
           infoList={assigneeList}
           label="Assignee"
           defaultValue={defaultAssignee}
-          onChange={onReload} // onChange 콜백 전달
+          onChange={onReload}
+          onError={onError}
         />
       </Box>
       <Box sx={containerStyle}>
@@ -102,7 +103,8 @@ const Sub = ({ issueContent, onReload }: { issueContent: Issue | null, onReload:
           infoList={statusList}
           label="Status"
           defaultValue={defaultStatus}
-          onChange={onReload} // onChange 콜백 전달
+          onChange={onReload}
+          onError={onError}
         />
       </Box>
       <Box sx={containerStyle}>
@@ -111,7 +113,8 @@ const Sub = ({ issueContent, onReload }: { issueContent: Issue | null, onReload:
           infoList={rankList}
           label="Rank"
           defaultValue={defaultRank}
-          onChange={onReload} // onChange 콜백 전달
+          onChange={onReload}
+          onError={onError}
         />
       </Box>
       <Box sx={containerStyle}>
