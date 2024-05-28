@@ -69,6 +69,10 @@ const Project = () => {
     setStatusList(statusData);
   };
 
+  const navigateToStatistics = () => {
+    router.push(`/statistics`);
+  };
+
   useEffect(() => {
     if (title && typeof title === 'string') {
       setProject(title);
@@ -127,6 +131,9 @@ const Project = () => {
         <Box sx={createStyle} onClick={openCreateProject}>
           Create
         </Box>
+        <Box sx={statisticsStyle} onClick={navigateToStatistics}>
+          통계
+        </Box>
         <CreateBox checkOpen={checkOpen} handleClose={handleLogoutClose} />
       </Box>
 
@@ -169,6 +176,20 @@ const createStyle = {
   width: '70px',
   height: '50px',
   bgcolor: 'green',
+  color: 'white',
+  borderRadius: '20px',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  fontWeight: 'bold',
+  cursor: 'pointer',
+};
+
+const statisticsStyle = {
+  width: '100px',
+  height: '50px',
+  bgcolor: 'blue',
+  margin: '5px',
   color: 'white',
   borderRadius: '20px',
   display: 'flex',
