@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/material';
+import { Box, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Grid, Button } from '@mui/material';
 import { useUser } from '@/hook/useUser';
 import { getStatisticsDay } from '@/apis/statistic';
+import Buttons from './Buttons';
 
 interface StatisticsData {
   column: string;
@@ -11,6 +12,7 @@ interface StatisticsData {
 const Statistics = () => {
   const { user, projectId } = useUser();
   const [stats, setStats] = useState<StatisticsData[]>([]);
+  const [currentButton, setCurrentButton] = useState<string>('day');
 
   useEffect(() => {
     const fetchStatistics = async () => {
@@ -27,6 +29,7 @@ const Statistics = () => {
 
   return (
     <Box sx={containerStyle}>
+      <Buttons setCurrentButton = {setCurrentButton}/>
       <TableContainer component={Paper} sx={tableContainerStyle}>
         <Table>
           <TableHead>
