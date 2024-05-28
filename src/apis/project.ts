@@ -33,3 +33,18 @@ export const getProject = async ({accessToken}:{accessToken: string}) => {
     console.error(error);
   }
 };
+
+export const getSearch = async ({accessToken, projectId, condition, conditionValue}:{accessToken: string, projectId: number, condition: string, conditionValue: number|string}) => {
+  try{
+    const response = await axios.get(`${baseURL}/issues/filter?projectId=${projectId}&condition=${condition}&conditionValue=${conditionValue}`, 
+    {
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        }
+      });
+    return response.data;
+
+  }catch(error){
+    console.error(error);
+  }
+};

@@ -5,7 +5,8 @@ import React, { useEffect, useState } from 'react';
 import CreateBox from './CreateBox';
 import IssueBox from './IssueBox';
 import Filter from './Filter';
-import { getIssueList, getUsers } from '@/apis/issue';
+import { getIssueList, getIssueStatusList, getUsers } from '@/apis/issue';
+import { getSearch } from '@/apis/project';
 
 const Project = () => {
   const { setProject, issueList, setIssueList, user, projectId } = useUser();
@@ -15,14 +16,34 @@ const Project = () => {
   const [checkOpen, setCheckOpen] = useState<boolean>(false);
   const [filter, setFilter] = useState<string>('');
   const [userList, setUserList] = useState<{ id: number; name: string }[]>([]);
+  const [statusList, setStatusList] = useState<{ statusName: string }[]>([]);
 
   const handleIssueChange = (event: SelectChangeEvent<string>) => {
     setSearchContent(event.target.value);
   };
 
-  const handleSearch = () => {
-    if (searchContent) {
-      router.push(`/issue?issue=${searchContent}`);
+  const handleSearch = async () => {
+    if (filter === 'all') {
+      const data = await getIssueList({ accessToken: user.accessToken, projectId });
+      setIssueList(data);
+    } else {
+      let conditionValue;
+      if (filter === 'assignee' || filter === 'reporter') {
+        const selectedUser = userList.find((user) => user.name === searchContent);
+        conditionValue = selectedUser ? selectedUser.id : '';
+      } else if (filter === 'issueStatus') {
+        conditionValue = searchContent;
+      }
+
+      if (conditionValue) {
+        const data = await getSearch({
+          accessToken: user.accessToken,
+          projectId,
+          condition: filter,
+          conditionValue,
+        });
+        setIssueList(data);
+      }
     }
   };
 
@@ -36,6 +57,16 @@ const Project = () => {
 
   const handleFilterChange = (selectedFilter: string) => {
     setFilter(selectedFilter);
+    setSearchContent(''); // 필터 변경 시 검색 내용을 초기화
+
+    if (selectedFilter === 'issueStatus') {
+      fetchStatusList();
+    }
+  };
+
+  const fetchStatusList = async () => {
+    const statusData = await getIssueStatusList();
+    setStatusList(statusData);
   };
 
   useEffect(() => {
@@ -47,7 +78,6 @@ const Project = () => {
   useEffect(() => {
     const fetchData = async () => {
       const data = await getIssueList({ accessToken: user.accessToken, projectId });
-      console.log(data);
       setIssueList(data);
     };
     fetchData();
@@ -65,20 +95,26 @@ const Project = () => {
     <Box sx={containerStyle}>
       <Box sx={searchBoxStyle}>
         <Filter onFilterChange={handleFilterChange} />
-        <FormControl sx={selectStyle}>
-          <InputLabel id="select-issue-label">Select User</InputLabel>
+        <FormControl sx={selectStyle} disabled={filter === 'all'}>
+          <InputLabel id="select-issue-label">Select {filter === 'issueStatus' ? 'Status' : 'User'}</InputLabel>
           <Select
-            labelId="select-user-label"
-            id="select-user"
+            labelId="select-filter-label"
+            id="select-filter"
             value={searchContent}
-            label="Select User"
+            label={`Select ${filter === 'issueStatus' ? 'Status' : 'User'}`}
             onChange={handleIssueChange}
           >
-            {userList.map((user) => (
-              <MenuItem key={user.id} value={user.name}>
-                {user.name}
-              </MenuItem>
-            ))}
+            {filter === 'issueStatus' ?
+              statusList.map((status, index) => (
+                <MenuItem key={index} value={status.statusName}>
+                  {status.statusName}
+                </MenuItem>
+              )) :
+              userList.map((user) => (
+                <MenuItem key={user.id} value={user.name}>
+                  {user.name}
+                </MenuItem>
+              ))}
           </Select>
         </FormControl>
         <CardMedia

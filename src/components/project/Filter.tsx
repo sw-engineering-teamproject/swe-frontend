@@ -24,6 +24,7 @@ const Filter = ({ onFilterChange }: FilterProps) => {
         label="Filter"
         onChange={handleChange}
       >
+        <MenuItem value={'all'}>All</MenuItem>
         <MenuItem value={'assignee'}>Assignee</MenuItem>
         <MenuItem value={'reporter'}>Reporter</MenuItem>
         <MenuItem value={'issueStatus'}>Issue Status</MenuItem>
