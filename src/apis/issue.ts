@@ -153,3 +153,17 @@ export const editIssueAssignee = async ({issueId, assignee, accessToken}: {issue
     console.error(error);
   }
 };
+
+export const getUsers = async ({accessToken}: {accessToken: string}) => {
+  try{
+    const response = await axios.get(`${baseURL}/users`,
+    {
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        }
+      });
+    return response.data;
+  }catch(error){
+    console.error(error);
+  }
+};

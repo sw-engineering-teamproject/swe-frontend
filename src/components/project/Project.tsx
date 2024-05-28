@@ -5,7 +5,7 @@ import React, { useEffect, useState } from 'react';
 import CreateBox from './CreateBox';
 import IssueBox from './IssueBox';
 import Filter from './Filter';
-import { getIssueList } from '@/apis/issue';
+import { getIssueList, getUsers } from '@/apis/issue';
 
 const Project = () => {
   const { setProject, issueList, setIssueList, user, projectId } = useUser();
@@ -14,6 +14,7 @@ const Project = () => {
   const [searchContent, setSearchContent] = useState<string>('');
   const [checkOpen, setCheckOpen] = useState<boolean>(false);
   const [filter, setFilter] = useState<string>('');
+  const [userList, setUserList] = useState<{ id: number; name: string }[]>([]);
 
   const handleIssueChange = (event: SelectChangeEvent<string>) => {
     setSearchContent(event.target.value);
@@ -52,22 +53,30 @@ const Project = () => {
     fetchData();
   }, [user.accessToken, checkOpen]);
 
+  useEffect(() => {
+    const fetchUsers = async () => {
+      const users = await getUsers({ accessToken: user.accessToken });
+      setUserList(users);
+    };
+    fetchUsers();
+  }, [user.accessToken]);
+
   return (
     <Box sx={containerStyle}>
       <Box sx={searchBoxStyle}>
-        <Filter onFilterChange={handleFilterChange}/>
+        <Filter onFilterChange={handleFilterChange} />
         <FormControl sx={selectStyle}>
-          <InputLabel id="select-issue-label">Select Issue</InputLabel>
+          <InputLabel id="select-issue-label">Select User</InputLabel>
           <Select
-            labelId="select-issue-label"
-            id="select-issue"
+            labelId="select-user-label"
+            id="select-user"
             value={searchContent}
-            label="Select Issue"
+            label="Select User"
             onChange={handleIssueChange}
           >
-            {issueList?.map((issue) => (
-              <MenuItem key={issue.id} value={issue.title}>
-                {issue.title}
+            {userList.map((user) => (
+              <MenuItem key={user.id} value={user.name}>
+                {user.name}
               </MenuItem>
             ))}
           </Select>
@@ -102,30 +111,6 @@ const containerStyle = {
   flexDirection: 'column',
   alignItems: 'center',
   gap: '1rem',
-};
-
-const textFieldStyle = {
-  width: '50%',
-  '& .MuiOutlinedInput-root': {
-    '& fieldset': {
-      borderColor: 'black',
-    },
-    '&:hover fieldset': {
-      borderColor: 'red',
-    },
-    '&.Mui-focused fieldset': {
-      borderColor: 'green',
-    },
-  },
-  '& .MuiInputBase-input': {
-    padding: '10px',
-  },
-  '& .MuiInputLabel-root': {
-    transform: 'translate(14px, 14px) scale(1)',
-    '&.MuiInputLabel-shrink': {
-      transform: 'translate(14px, -15px) scale(0.75)',
-    },
-  },
 };
 
 const searchStyle = {
