@@ -58,7 +58,7 @@ const containerStyle = {
   display: 'flex',
   flexDirection: 'column',
   alignItems: 'center',
-  justifyContent: 'center',
+  paddingTop: '100px',
   gap: '1rem',
 };
 
