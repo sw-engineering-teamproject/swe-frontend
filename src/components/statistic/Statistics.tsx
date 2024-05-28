@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Box, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Grid, Button } from '@mui/material';
 import { useUser } from '@/hook/useUser';
-import { getStatisticsDay } from '@/apis/statistic';
+import { getStatisticsAssignee, getStatisticsDay, getStatisticsMonth, getStatisticsPriority, getStatisticsReporter, getStatisticsStatus } from '@/apis/statistic';
 import Buttons from './Buttons';
 
 interface StatisticsData {
@@ -17,15 +17,33 @@ const Statistics = () => {
   useEffect(() => {
     const fetchStatistics = async () => {
       try {
-        const data = await getStatisticsDay({ accessToken: user.accessToken, projectId });
-        setStats(data);
+        if(currentButton === 'day'){
+          const data = await getStatisticsDay({ accessToken: user.accessToken, projectId });
+          setStats(data);
+        }else if(currentButton === 'month'){
+          const data = await getStatisticsMonth({ accessToken: user.accessToken, projectId });
+          setStats(data);
+        }else if(currentButton === 'assignee'){
+          const data = await getStatisticsAssignee({ accessToken: user.accessToken, projectId });
+          setStats(data);
+        }else if(currentButton === 'reporter'){
+          const data = await getStatisticsReporter({ accessToken: user.accessToken, projectId });
+          setStats(data);
+        }else if(currentButton === 'status'){
+          const data = await getStatisticsStatus({ accessToken: user.accessToken, projectId });
+          setStats(data);
+        }else if(currentButton === 'priority'){
+          const data = await getStatisticsPriority({ accessToken: user.accessToken, projectId });
+          setStats(data);
+        }
+        
       } catch (error) {
         console.error(error);
       }
     };
 
     fetchStatistics();
-  }, [user.accessToken, projectId]);
+  }, [user.accessToken, projectId, currentButton]);
 
   return (
     <Box sx={containerStyle}>
