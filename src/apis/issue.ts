@@ -116,7 +116,7 @@ export const editIssuePriority = async ({issueId, priority, accessToken}: {issue
       });
     return response.data;
   }catch(error){
-    console.error(error);
+    throw error;
   }
 };
 
@@ -133,7 +133,7 @@ export const editIssueStatus = async ({issueId, status, accessToken}: {issueId: 
       });
     return response.data;
   }catch(error){
-    console.error(error);
+    throw error;
   }
 };
 
@@ -150,7 +150,7 @@ export const editIssueAssignee = async ({issueId, assignee, accessToken}: {issue
       });
     return response.data;
   }catch(error){
-    console.error(error);
+    throw error;
   }
 };
 

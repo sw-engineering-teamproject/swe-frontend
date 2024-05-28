@@ -9,10 +9,10 @@ interface LogoutModalProps {
 const AuthorityBox: React.FC<LogoutModalProps> = ({ checkOpen, handleClose, errorMessage }) => {
     return (
       <Dialog open={checkOpen} onClose={handleClose}>
-        <DialogTitle>{"권한 문제"}</DialogTitle>
+        <DialogTitle>{"Error"}</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            {errorMessage || "error message"}
+            {errorMessage}
           </DialogContentText>
         </DialogContent>
         <DialogActions>
