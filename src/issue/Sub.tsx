@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Box } from '@mui/material';
 import SelectPerson from './SelectPerson';
-import { getIssuePriorityList, getIssueStatusList } from '@/apis/issue';
+import { getIssuePriorityList, getIssueStatusList, getUsers } from '@/apis/issue';
+import { useUser } from '@/hook/useUser';
 
 interface User {
   id: number;
@@ -30,9 +31,11 @@ interface Issue {
 
 interface Info {
   infoName: string;
+  userId?: number;
 }
 
 const Sub = ({ issueContent }: { issueContent: Issue | null }) => {
+  const {user} = useUser();
   const [statusList, setStatusList] = useState<Info[]>([]);
   const [assigneeList, setAssigneeList] = useState<Info[]>([]);
   const [rankList, setRankList] = useState<Info[]>([]);
@@ -49,13 +52,18 @@ const Sub = ({ issueContent }: { issueContent: Issue | null }) => {
     };
 
     const fetchAssigneeList = async () => {
-      // 여기에 API 호출을 통해 assignee 목록을 가져오는 로직을 추가하세요.
+      try {
+        const assigneeData = await getUsers({accessToken: user.accessToken});
+        const formattedAssigneeData = assigneeData.map((assignee: { id: number, name: string }) => ({ infoName: assignee.name, userId: assignee.id }));
+        setAssigneeList(formattedAssigneeData || []);
+      } catch (error) {
+        console.error(error);
+      }
     };
 
     const fetchRankList = async () => {
       try {
         const rankData = await getIssuePriorityList();
-        console.log(rankData);
         const formattedRankData = rankData.map((priority: { priorityName: string }) => ({ infoName: priority.priorityName }));
         setRankList(formattedRankData || []);
       } catch (error) {
@@ -66,7 +74,7 @@ const Sub = ({ issueContent }: { issueContent: Issue | null }) => {
     fetchStatusList();
     fetchAssigneeList();
     fetchRankList();
-  }, []);
+  }, [user.accessToken]);
 
   return (
     <Box sx={subStyle}>
@@ -116,12 +124,6 @@ const containerStyle = {
   marginBottom: '10px',
   fontWeight: 'bold',
   fontSize: '22px',
-};
-
-const personSelectStyle = {
-  width: '70%',
-  height: '30px',
-  bgcolor: 'grey',
 };
 
 const fixerStyle = {

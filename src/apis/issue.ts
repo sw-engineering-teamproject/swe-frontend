@@ -137,7 +137,7 @@ export const editIssueStatus = async ({issueId, status, accessToken}: {issueId: 
   }
 };
 
-export const editIssueAssignee = async ({issueId, assignee, accessToken}: {issueId: number, assignee: string, accessToken: string}) => {
+export const editIssueAssignee = async ({issueId, assignee, accessToken}: {issueId: number, assignee: number, accessToken: string}) => {
   try{
     const response = await axios.post(`${baseURL}/issues/${issueId}/assignee`, 
     {
