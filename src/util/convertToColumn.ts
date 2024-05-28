@@ -5,4 +5,8 @@ export const extractMonth = (dateString: string) => {
   }
   return parts[1];
 };
-  
+
+export const extractNickname = (userString: string): string => {
+  const match = userString.match(/nickname=(.*?),/);
+  return match ? match[1] : userString;
+};

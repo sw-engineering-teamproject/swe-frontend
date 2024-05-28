@@ -3,6 +3,7 @@ import { Box, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, 
 import { useUser } from '@/hook/useUser';
 import { getStatisticsAssignee, getStatisticsDay, getStatisticsMonth, getStatisticsPriority, getStatisticsReporter, getStatisticsStatus } from '@/apis/statistic';
 import Buttons from './Buttons';
+import { extractMonth, extractNickname } from '@/util/convertToColumn';
 
 interface StatisticsData {
   column: string;
@@ -17,26 +18,33 @@ const Statistics = () => {
   useEffect(() => {
     const fetchStatistics = async () => {
       try {
-        if(currentButton === 'day'){
-          const data = await getStatisticsDay({ accessToken: user.accessToken, projectId });
-          setStats(data);
-        }else if(currentButton === 'month'){
-          const data = await getStatisticsMonth({ accessToken: user.accessToken, projectId });
-          setStats(data);
-        }else if(currentButton === 'assignee'){
-          const data = await getStatisticsAssignee({ accessToken: user.accessToken, projectId });
-          setStats(data);
-        }else if(currentButton === 'reporter'){
-          const data = await getStatisticsReporter({ accessToken: user.accessToken, projectId });
-          setStats(data);
-        }else if(currentButton === 'status'){
-          const data = await getStatisticsStatus({ accessToken: user.accessToken, projectId });
-          setStats(data);
-        }else if(currentButton === 'priority'){
-          const data = await getStatisticsPriority({ accessToken: user.accessToken, projectId });
-          setStats(data);
+        let data;
+        if (currentButton === 'day') {
+          data = await getStatisticsDay({ accessToken: user.accessToken, projectId });
+        } else if (currentButton === 'month') {
+          data = await getStatisticsMonth({ accessToken: user.accessToken, projectId });
+          data = data.map((item: any) => ({
+            column: extractMonth(item.column),
+            count: item.count,
+          }));
+        } else if (currentButton === 'assignee') {
+          data = await getStatisticsAssignee({ accessToken: user.accessToken, projectId });
+          data = data.map((item: any) => ({
+            column: extractNickname(item.column),
+            count: item.count,
+          }));
+        } else if (currentButton === 'reporter') {
+          data = await getStatisticsReporter({ accessToken: user.accessToken, projectId });
+          data = data.map((item: any) => ({
+            column: extractNickname(item.column),
+            count: item.count,
+          }));
+        } else if (currentButton === 'status') {
+          data = await getStatisticsStatus({ accessToken: user.accessToken, projectId });
+        } else if (currentButton === 'priority') {
+          data = await getStatisticsPriority({ accessToken: user.accessToken, projectId });
         }
-        
+        setStats(data);
       } catch (error) {
         console.error(error);
       }
