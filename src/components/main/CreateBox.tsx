@@ -1,18 +1,18 @@
 import { postProject } from '@/apis/project';
 import { useUser } from '@/hook/useUser';
+import { controlError } from '@/util/controlError';
 import { Box, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField } from '@mui/material';
 import React, { useState } from 'react';
 
-interface LogoutModalProps {
+interface CreateBoxProps {
   checkOpen: boolean;
   handleClose: () => void;
-  onCantCreate: () => void;
+  onCantCreate: (message: string) => void; // 콜백 함수로 에러 메시지 전달
 }
 
-const CreateBox: React.FC<LogoutModalProps> = ({ checkOpen, handleClose, onCantCreate }) => {
-  const { addProject } = useUser();
-  const [title, setTitle] = useState<string>('');
+const CreateBox: React.FC<CreateBoxProps> = ({ checkOpen, handleClose, onCantCreate }) => {
   const { user } = useUser();
+  const [title, setTitle] = useState<string>('');
 
   const handleTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setTitle(event.target.value);
@@ -23,12 +23,12 @@ const CreateBox: React.FC<LogoutModalProps> = ({ checkOpen, handleClose, onCantC
       await postProject({ title, accessToken: user.accessToken });
       handleClose();
     } catch (error: any) {
-      if (error.response && error.response.status === 403) {
-        console.error(1);
-        onCantCreate(); // 403 에러 발생 시 콜백 함수 호출
-      } else {
-        console.error(error);
+      let errorMessage = 'An unknown error occurred';
+      if (error.response) {
+        errorMessage = controlError(error.response.data);
       }
+      console.error(errorMessage);
+      onCantCreate(errorMessage);
     }
   };
 

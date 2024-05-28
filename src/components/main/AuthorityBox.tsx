@@ -3,15 +3,16 @@ import React from 'react'
 interface LogoutModalProps {
   checkOpen: boolean;
   handleClose: () => void;
+  errorMessage: string;
 }
 
-const CantCreateBox: React.FC<LogoutModalProps> = ({ checkOpen, handleClose }) => {
+const AuthorityBox: React.FC<LogoutModalProps> = ({ checkOpen, handleClose, errorMessage }) => {
     return (
       <Dialog open={checkOpen} onClose={handleClose}>
-        <DialogTitle>{"권한 문제"}</DialogTitle>
+        <DialogTitle>{"Error"}</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            권한이 없습니다
+            {errorMessage}
           </DialogContentText>
         </DialogContent>
         <DialogActions>
@@ -22,4 +23,4 @@ const CantCreateBox: React.FC<LogoutModalProps> = ({ checkOpen, handleClose }) =
   }
   
 
-export default CantCreateBox;
+export default AuthorityBox;

@@ -5,7 +5,7 @@ import { useRouter } from 'next/router';
 import { useUser } from '@/hook/useUser';
 import CreateBox from './CreateBox';
 import { getProject } from '@/apis/project';
-import CantCreateBox from './CantCreateBox';
+import CantCreateBox from './AuthorityBox';
 
 const Main = () => {
   const { projectList, user, setProjectList } = useUser();
@@ -13,6 +13,7 @@ const Main = () => {
   const [search, setSearch] = useState<string>('');
   const [checkOpen, setCheckOpen] = useState<boolean>(false);
   const [checkOpenCantCreate, setCheckOpenCantCreate] = useState<boolean>(false);
+  const [errorMessage, setErrorMessage] = useState<string>('');
 
   const handleIdChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearch(event.target.value);
@@ -32,7 +33,8 @@ const Main = () => {
     setCheckOpenCantCreate(false);
   };
 
-  const handleCantCreateOpen = () => {
+  const handleCantCreateOpen = (message: string) => {
+    setErrorMessage(message);
     setCheckOpenCantCreate(true);
   };
 
@@ -53,7 +55,7 @@ const Main = () => {
               Create
             </Box>
             <CreateBox checkOpen={checkOpen} handleClose={handleLogoutClose} onCantCreate={handleCantCreateOpen} />
-            <CantCreateBox checkOpen={checkOpenCantCreate} handleClose={handleCantCreateClose} />
+            <CantCreateBox checkOpen={checkOpenCantCreate} handleClose={handleCantCreateClose} errorMessage={errorMessage} />
           </>
         ) : (
           ''
@@ -148,6 +150,8 @@ const createStyle = {
   width: '70px',
   height: '50px',
   bgcolor: 'green',
+ 
+
   color: 'white',
   borderRadius: '20px',
   display: 'flex',
