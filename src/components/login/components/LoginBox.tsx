@@ -20,7 +20,6 @@ const LoginBox = () => {
   const handleClick = async () => {
     const data = await postLogin({id, pw});
     if(data){
-      console.log(data.token);
       setAccessToken(data.token);
       setNickname(data.nickname);
       router.push('/');

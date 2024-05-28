@@ -47,7 +47,6 @@ const SelectPerson = ({ infoList, label, defaultValue, userId, onChange, onError
     } catch (error: any) {
       let errorMessage = 'An unknown error occurred';
       if (error.response) {
-        console.log(error.response);
         errorMessage = controlError(error.response.data);
       }
       console.error(errorMessage);

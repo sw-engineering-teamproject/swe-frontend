@@ -5,7 +5,6 @@ const Buttons = ({setCurrentButton}:{setCurrentButton: (filterType:string)=>void
   const [activeButton, setActiveButton] = useState<string | null>('day');
 
   const handleButtonClick = (filterType: string) => {
-    console.log(`${filterType} button clicked`);
     setActiveButton(filterType);
     setCurrentButton(filterType);
     // Add logic to handle button click based on filterType

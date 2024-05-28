@@ -23,7 +23,6 @@ const Content: React.FC<ContentProps> = ({ description }) => {
   const handleSave = async () => {
     if (edit) {
       const data = await editIssueDescription({ issueId, description: content, accessToken: user.accessToken });
-      console.log(data);
     }
     setEdit(!edit);
     setSavedContent(content);

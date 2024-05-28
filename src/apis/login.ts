@@ -8,7 +8,6 @@ export const postLogin = async ({id, pw}: {id: string, pw: string}) => {
       accountId: id,
       password: pw,
     });
-    console.log(response);
     return response.data;
 
   }catch(error){
@@ -17,7 +16,6 @@ export const postLogin = async ({id, pw}: {id: string, pw: string}) => {
 };
 
 export const postRegister = async ({id, pw, name, role}:{id: string, pw: string, name: string, role: string}) => {
-  console.log(id, pw, name, role);
   try{
     const response = await axios.post(`${baseURL}/register`, {
       accountId: id,
@@ -25,7 +23,6 @@ export const postRegister = async ({id, pw, name, role}:{id: string, pw: string,
       nickName: name,
       roleName: role,
     });
-    console.log(response);
     if(response.status === 200){
       return true;
     }else{
@@ -42,7 +39,6 @@ export const isNicknameDuplicated = async (name: string) => {
     const response = await axios.post(`${baseURL}/users/nickname/check`, {
       nickname: name,
     });
-    console.log(response);
     return response.data;
   }catch(error){
     console.error(error);
