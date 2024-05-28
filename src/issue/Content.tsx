@@ -11,11 +11,11 @@ interface ContentProps {
 
 const Content: React.FC<ContentProps> = ({ description }) => {
   const { commentList } = useUser();
-  const [edit, setEdit] = useState<boolean>(false);
   const [content, setContent] = useState<string>(description);
   const [savedContent, setSavedContent] = useState<string>(description);
   const { issueId, user } = useUser();
-
+  const [edit, setEdit] = useState<boolean>(issueId===-1?true:false);
+  
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setContent(event.target.value);
   };
@@ -30,9 +30,11 @@ const Content: React.FC<ContentProps> = ({ description }) => {
   };
 
   useEffect(() => {
-    setContent(description);
-    setSavedContent(description);
-  }, [description]);
+    if(issueId!==-1){
+      setContent(description);
+      setSavedContent(description);
+    }
+  }, [description, issueId]);
 
   return (
     <Box sx={{ width: '100%', mx: 'auto' }}>

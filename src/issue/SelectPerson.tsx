@@ -13,9 +13,10 @@ interface SelectPersonProps {
   label: string;
   defaultValue: string;
   userId?: number;
+  onChange?: () => void; // 새로운 콜백 프로퍼티 추가
 }
 
-const SelectPerson = ({ infoList, label, defaultValue, userId }: SelectPersonProps) => {
+const SelectPerson = ({ infoList, label, defaultValue, userId, onChange }: SelectPersonProps) => {
   const [selectedValue, setSelectedValue] = useState<string>(defaultValue);
   const { user, issueId } = useUser();
 
@@ -35,6 +36,10 @@ const SelectPerson = ({ infoList, label, defaultValue, userId }: SelectPersonPro
       await editIssueStatus({ issueId, status: value, accessToken: user.accessToken });
     } else if (label === "Assignee" && selectedInfo?.userId) {
       await editIssueAssignee({ issueId, assignee: selectedInfo.userId, accessToken: user.accessToken });
+    }
+    
+    if (onChange) {
+      onChange();
     }
   };
 

@@ -15,7 +15,7 @@ export const postProject = async ({title, accessToken}: {title: string; accessTo
     return response.data;
 
   }catch(error){
-    console.error(error);
+    throw error;
   }
 };
 

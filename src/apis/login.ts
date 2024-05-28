@@ -23,7 +23,7 @@ export const postRegister = async ({id, pw, name, role}:{id: string, pw: string,
       accountId: id,
       password: pw,
       nickName: name,
-      role: role,
+      roleName: role,
     });
     console.log(response);
     if(response.status === 200){
@@ -47,4 +47,15 @@ export const isNicknameDuplicated = async (name: string) => {
   }catch(error){
     console.error(error);
   }
-}
+};
+
+export const getRoles = async () => {
+  try {
+    const response = await axios.get(`${baseURL}/users/role`);
+    
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching roles:', error);
+    return [];
+  }
+};

@@ -1,7 +1,7 @@
 import { useUser } from '@/hook/useUser';
 import { Box, Button, TextField } from '@mui/material';
 import { useRouter } from 'next/router';
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react';
 import Content from './Content';
 import Sub from './Sub';
 import { createIssue, getIssue } from '@/apis/issue';
@@ -9,7 +9,7 @@ import { createIssue, getIssue } from '@/apis/issue';
 interface User {
   id: number;
   name: string;
-};
+}
 
 interface Comment {
   id: number;
@@ -29,15 +29,14 @@ interface Issue {
   status: string;
   priority: string;
   comments: Comment[];
-};
+}
 
-const Issue = () => {
-  const {setIssue, user, projectId, issueId, setIssueId, setCommentList} = useUser();
+const IssuePage = () => {
+  const { setIssue, user, projectId, issueId, setIssueId, setCommentList } = useUser();
   const router = useRouter();
-  const title = router.query.issue;
+  const title = router.query.issue as string;
   const [content, setContent] = useState<string>('');
-  const [edit, setEdit] = useState<boolean>(false);
-  const [savedContent, setSavedContent] = useState<string>('');
+  const [edit, setEdit] = useState<boolean>(!title);
   const [issueDetail, setIssueDetail] = useState<Issue | null>(null);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -45,38 +44,33 @@ const Issue = () => {
   };
 
   const handleSave = async () => {
-    setEdit(!edit);
-    setSavedContent(content);
-    const response = await createIssue({title: content, accessToken: user.accessToken, projectId});
+    setEdit(false);
+    const response = await createIssue({ title: content, accessToken: user.accessToken, projectId });
     setIssueId(response.id);
     router.push(`/issue?issue=${content}`);
   };
 
-  useEffect(()=>{
-    const fetchData = async () => {
-      const data = await getIssue({issueId, accessToken: user.accessToken});
-      console.log(data);
+  const fetchData = async () => {
+    if (issueId) {
+      const data = await getIssue({ issueId, accessToken: user.accessToken });
       setIssueDetail(data);
-      if(data && data.comments){
+      if (data && data.comments) {
         setCommentList(data.comments);
       }
     }
+  };
 
-    if(title && typeof title === 'string'){
+  useEffect(() => {
+    if (title) {
       setIssue(title);
-    }else{
-      setEdit(true);
-    };
-    fetchData();
-  },[router.query, setIssue]);
+      fetchData();
+    }
+  }, [title, issueId, user.accessToken, setIssue, setCommentList]);
+
   return (
     <Box sx={containerStyle}>
-      {
-        title &&
-        <Box sx={titleStyle}>{title}</Box>
-      }
-      {
-        edit &&
+      {title && <Box sx={titleStyle}>{title}</Box>}
+      {edit && (
         <Box sx={titleStyle}>
           <TextField
             label="Write something"
@@ -97,17 +91,17 @@ const Issue = () => {
             Save
           </Button>
         </Box>
-      }
-      <Box sx={{width: '80%', height: '1px', bgcolor: 'grey',}}/>
+      )}
+      <Box sx={{ width: '80%', height: '1px', bgcolor: 'grey' }} />
       <Box sx={issueContentStyle}>
-        <Content description={issueDetail?.description || ""}/>
-        <Sub issueContent={issueDetail}/>
+        <Content description={issueDetail?.description || ''} />
+        <Sub issueContent={issueDetail} onReload={fetchData} />
       </Box>
     </Box>
-  )
-}
+  );
+};
 
-export default Issue;
+export default IssuePage;
 
 const containerStyle = {
   width: '100%',
@@ -131,7 +125,6 @@ const issueContentStyle = {
   width: '80%',
   display: 'flex',
 };
-
 
 const textFieldStyle = {
   width: '50%',
