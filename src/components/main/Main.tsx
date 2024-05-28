@@ -5,12 +5,14 @@ import { useRouter } from 'next/router';
 import { useUser } from '@/hook/useUser';
 import CreateBox from './CreateBox';
 import { getProject } from '@/apis/project';
+import CantCreateBox from './CantCreateBox';
 
 const Main = () => {
   const { projectList, user, setProjectList } = useUser();
   const router = useRouter();
   const [search, setSearch] = useState<string>('');
   const [checkOpen, setCheckOpen] = useState<boolean>(false);
+  const [checkOpenCantCreate, setCheckOpenCantCreate] = useState<boolean>(false);
 
   const handleIdChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearch(event.target.value);
@@ -24,6 +26,14 @@ const Main = () => {
 
   const handleLogoutClose = () => {
     setCheckOpen(false);
+  };
+
+  const handleCantCreateClose = () => {
+    setCheckOpenCantCreate(false);
+  };
+
+  const handleCantCreateOpen = () => {
+    setCheckOpenCantCreate(true);
   };
 
   useEffect(() => {
@@ -42,7 +52,8 @@ const Main = () => {
             <Box sx={createStyle} onClick={openCreateProject}>
               Create
             </Box>
-            <CreateBox checkOpen={checkOpen} handleClose={handleLogoutClose} />
+            <CreateBox checkOpen={checkOpen} handleClose={handleLogoutClose} onCantCreate={handleCantCreateOpen} />
+            <CantCreateBox checkOpen={checkOpenCantCreate} handleClose={handleCantCreateClose} />
           </>
         ) : (
           ''
