@@ -1,6 +1,6 @@
 import axios from "axios"
 
-const baseURL = 'https://swe.dongwoo.win'
+const baseURL = process.env.NEXT_PUBLIC_SERVER_URL;
 
 export const postLogin = async ({id, pw}: {id: string, pw: string}) => {
   try{
