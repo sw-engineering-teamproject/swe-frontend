@@ -1,30 +1,116 @@
+import React, { useEffect, useState } from 'react';
 import { Box } from '@mui/material';
-import React from 'react'
 import SelectPerson from './SelectPerson';
+import { getIssuePriorityList, getIssueStatusList, getUsers } from '@/apis/issue';
+import { useUser } from '@/hook/useUser';
 
-const Sub = () => {
+interface User {
+  id: number;
+  name: string;
+}
+
+interface Comment {
+  id: number;
+  commenter: User;
+  content: string;
+  createdAt: string;
+}
+
+interface Issue {
+  id: number;
+  title: string;
+  description: string;
+  reporter: User;
+  assignee: User | null;
+  fixer: User | null;
+  reportedTime: string;
+  status: string;
+  priority: string;
+  comments: Comment[];
+}
+
+interface Info {
+  infoName: string;
+  userId?: number;
+}
+
+const Sub = ({ issueContent }: { issueContent: Issue | null }) => {
+  const {user} = useUser();
+  const [statusList, setStatusList] = useState<Info[]>([]);
+  const [assigneeList, setAssigneeList] = useState<Info[]>([]);
+  const [rankList, setRankList] = useState<Info[]>([]);
+
+  useEffect(() => {
+    const fetchStatusList = async () => {
+      try {
+        const statusData = await getIssueStatusList();
+        const formattedStatusData = statusData.map((status: { statusName: string }) => ({ infoName: status.statusName }));
+        setStatusList(formattedStatusData || []);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    const fetchAssigneeList = async () => {
+      try {
+        const assigneeData = await getUsers({accessToken: user.accessToken});
+        const formattedAssigneeData = assigneeData.map((assignee: { id: number, name: string }) => ({ infoName: assignee.name, userId: assignee.id }));
+        setAssigneeList(formattedAssigneeData || []);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    const fetchRankList = async () => {
+      try {
+        const rankData = await getIssuePriorityList();
+        const formattedRankData = rankData.map((priority: { priorityName: string }) => ({ infoName: priority.priorityName }));
+        setRankList(formattedRankData || []);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchStatusList();
+    fetchAssigneeList();
+    fetchRankList();
+  }, [user.accessToken]);
+
   return (
     <Box sx={subStyle}>
       <Box sx={containerStyle}>
         Assignee
-        <SelectPerson/>
+        <SelectPerson
+          infoList={assigneeList}
+          label="Assignee"
+          defaultValue={issueContent?.assignee?.name || ''}
+        />
       </Box>
       <Box sx={containerStyle}>
-        status
-        <SelectPerson/>
+        Status
+        <SelectPerson
+          infoList={statusList}
+          label="Status"
+          defaultValue={issueContent?.status || ''}
+        />
       </Box>
       <Box sx={containerStyle}>
         Rank
-        <SelectPerson/>
+        <SelectPerson
+          infoList={rankList}
+          label="Rank"
+          defaultValue={issueContent?.priority || ''}
+        />
       </Box>
       <Box sx={containerStyle}>
         Fixer
-        <SelectPerson/>
+        <Box sx={fixerStyle}>
+          {!issueContent || issueContent?.fixer === null ? "NONE" : issueContent.fixer.name}
+        </Box>
       </Box>
-
     </Box>
-  )
-}
+  );
+};
 
 export default Sub;
 
@@ -38,11 +124,10 @@ const containerStyle = {
   marginBottom: '10px',
   fontWeight: 'bold',
   fontSize: '22px',
-
 };
 
-const personSelectStyle = {
-  width: '70%',
-  height: '30px',
-  bgcolor: 'grey',
-}
+const fixerStyle = {
+  fontSize: '17px',
+  fontWeight: 'normal',
+  color: 'black',
+};

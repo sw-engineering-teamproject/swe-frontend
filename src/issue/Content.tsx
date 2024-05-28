@@ -1,28 +1,42 @@
 import { Box, Button, TextField } from '@mui/material';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import CommentWrite from './CommentWrite';
 import Comment from './Comment';
 import { useUser } from '@/hook/useUser';
+import { editIssueDescription } from '@/apis/issue';
 
-const Content = () => {
-  const {commentList} = useUser();
+interface ContentProps {
+  description: string;
+}
+
+const Content: React.FC<ContentProps> = ({ description }) => {
+  const { commentList } = useUser();
   const [edit, setEdit] = useState<boolean>(false);
-  const [content, setContent] = useState<string>('');
-  const [savedContent, setSavedContent] = useState<string>('');
-  const commentContent = "ㅎㅇㅎㅇ";
+  const [content, setContent] = useState<string>(description);
+  const [savedContent, setSavedContent] = useState<string>(description);
+  const { issueId, user } = useUser();
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setContent(event.target.value);
   };
 
-  const handleSave = () => {
+  const handleSave = async () => {
+    if (edit) {
+      const data = await editIssueDescription({ issueId, description: content, accessToken: user.accessToken });
+      console.log(data);
+    }
     setEdit(!edit);
     setSavedContent(content);
   };
 
+  useEffect(() => {
+    setContent(description);
+    setSavedContent(description);
+  }, [description]);
+
   return (
-    <Box sx={{ width: '100%', mx: 'auto', }}>
-      {edit &&
+    <Box sx={{ width: '100%', mx: 'auto' }}>
+      {edit ? (
         <>
           <TextField
             label="Write something"
@@ -43,24 +57,21 @@ const Content = () => {
             Save
           </Button>
         </>
-      }
-      {!edit &&
+      ) : (
         <>
-          <Box>
-            {savedContent}
-          </Box>
+          <Box>{savedContent}</Box>
           <Button
             variant="contained"
             color="primary"
-            onClick={handleSave}
+            onClick={() => setEdit(true)}
             sx={{ ...saveStyle, mt: 2 }}
           >
             Edit
           </Button>
         </>
-      }
+      )}
       {commentList.map((comment, index) => (
-        <Comment key={index} commentContent={comment.commentContent} time={comment.time} name={comment.name} />
+        <Comment key={index} commentContent={comment.content} time={comment.createdAt} name={comment.commenter.name} />
       ))}
       <CommentWrite />
     </Box>

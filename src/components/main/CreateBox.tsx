@@ -10,8 +10,8 @@ interface LogoutModalProps {
 const CreateBox: React.FC<LogoutModalProps> = ({ checkOpen, handleClose }) => {
   const {addProject} = useUser();
   const [title, setTitle] = useState<string>('');
+  const {user} = useUser();
   const [reporter, setReporter] = useState<string>('');
-  const accessToken = "123";
   const handleTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setTitle(event.target.value);
   };
@@ -19,9 +19,7 @@ const CreateBox: React.FC<LogoutModalProps> = ({ checkOpen, handleClose }) => {
     setReporter(event.target.value);
   };
   const handleCreate = async() => {
-    addProject({title: title, reporter: reporter});
-
-    await postProject({title, reporter, accessToken});
+    await postProject({title, accessToken: user.accessToken});
     handleClose();
   }
   
@@ -37,10 +35,10 @@ const CreateBox: React.FC<LogoutModalProps> = ({ checkOpen, handleClose }) => {
           <TextField sx={textFieldStyle} id='outlined-basic' label='Project Title' variant='outlined' onChange={handleTitleChange}/>
           </Box>
 
-          <Box sx={fieldBoxStyle}>
+          {/* <Box sx={fieldBoxStyle}>
           Reporter
           <TextField sx={textFieldStyle} id='outlined-basic' label='reporter' variant='outlined' onChange={handleReporterChange}/>
-          </Box>
+          </Box> */}
 
         </DialogContentText>
       </DialogContent>
@@ -60,7 +58,7 @@ const fieldBoxStyle = {
 }
 
 const textFieldStyle = {
-  width: '500px',
+  width: '100%',
   '& .MuiOutlinedInput-root': {
     '& fieldset': {
       borderColor: 'black',

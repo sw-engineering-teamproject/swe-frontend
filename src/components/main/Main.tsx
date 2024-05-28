@@ -4,9 +4,10 @@ import ProjectBox from './ProjectBox';
 import { useRouter } from 'next/router';
 import { useUser } from '@/hook/useUser';
 import CreateBox from './CreateBox';
+import { getProject } from '@/apis/project';
 
 const Main = () => {
-  const {projectList} = useUser();
+  const {projectList, user, setProjectList} = useUser();
   const router = useRouter();
   const [search, setSearch] = useState<string>('');
   const [checkOpen, setCheckOpen] = useState<boolean>(false);
@@ -24,7 +25,15 @@ const Main = () => {
 
   const handleLogoutClose = () => {
     setCheckOpen(false);
-  }
+  };
+
+  useEffect(()=>{
+    const fetchData = async () => {
+      const data = await getProject({accessToken: user.accessToken});
+      setProjectList(data);
+    }
+    fetchData();
+  }, [user.accessToken, checkOpen]);
 
   return (
     <Box sx={containerStyle}>
@@ -42,10 +51,16 @@ const Main = () => {
         </Box>
         <CreateBox checkOpen={checkOpen} handleClose={handleLogoutClose}/>
     </Box>
-    
-    {projectList?.map((project, index) => (
-        <ProjectBox key={index} title={project.title} />
-    ))}
+        {
+          user.accessToken ?
+          
+          projectList?.map((project, index) => (
+              <ProjectBox key={index} title={project.title} id={project.id}/>
+          ))
+          :
+          'Sign In'
+        }
+
     </Box>
   )
 }

@@ -1,53 +1,61 @@
-import { Box, FormControl, InputLabel, MenuItem, Select, SelectChangeEvent } from '@mui/material'
-import React, { useState } from 'react'
+import { editIssueAssignee, editIssuePriority, editIssueStatus } from '@/apis/issue';
+import { useUser } from '@/hook/useUser';
+import { Box, FormControl, InputLabel, MenuItem, Select, SelectChangeEvent } from '@mui/material';
+import React, { useState, useEffect } from 'react';
 
-const SelectPerson = () => {
-  const [filterOpen, setFilterOpen] = useState<boolean>(false);
+interface Info {
+  infoName: string;
+  userId?: number;
+}
 
-  const handleFilterOpen = () => {
-    setFilterOpen(!filterOpen);
-  };
-  const [age, setAge] = React.useState('');
+interface SelectPersonProps {
+  infoList: Info[];
+  label: string;
+  defaultValue: string;
+  userId?: number;
+}
 
-  const handleChange = (event: SelectChangeEvent) => {
-    setAge(event.target.value);
+const SelectPerson = ({ infoList, label, defaultValue, userId }: SelectPersonProps) => {
+  const [selectedValue, setSelectedValue] = useState<string>(defaultValue);
+  const { user, issueId } = useUser();
+
+  useEffect(() => {
+    setSelectedValue(defaultValue);
+  }, [defaultValue]);
+
+  const handleChange = async (event: SelectChangeEvent) => {
+    const value = event.target.value;
+    setSelectedValue(value);
+    
+    const selectedInfo = infoList.find(info => info.infoName === value);
+
+    if (label === "Rank") {
+      await editIssuePriority({ issueId, priority: value, accessToken: user.accessToken });
+    } else if (label === "Status") {
+      await editIssueStatus({ issueId, status: value, accessToken: user.accessToken });
+    } else if (label === "Assignee" && selectedInfo?.userId) {
+      await editIssueAssignee({ issueId, assignee: selectedInfo.userId, accessToken: user.accessToken });
+    }
   };
 
   return (
-    <div>
-      <FormControl sx={{ m: 1, minWidth: 120 }}>
-        <InputLabel id="select-helper-label">Filter</InputLabel>
-        <Select
-          labelId="select-helper-label"
-          id="select-helper"
-          value={age}
-          label="Age"
-          onChange={handleChange}
-        >
-          <MenuItem value="">
-            <em>None</em>
+    <FormControl sx={{ m: 1, minWidth: 120 }}>
+      <InputLabel id={`select-helper-label-${label}`}>{label}</InputLabel>
+      <Select
+        labelId={`select-helper-label-${label}`}
+        id={`select-helper-${label}`}
+        value={selectedValue}
+        label={label}
+        onChange={handleChange}
+      >
+        {(infoList || []).map((info, index) => (
+          <MenuItem key={index} value={info.infoName}>
+            {info.infoName}
           </MenuItem>
-          <MenuItem value={10}>Assignee</MenuItem>
-          <MenuItem value={20}>Status</MenuItem>
-        </Select>
-        {/* <FormHelperText>With label + helper text</FormHelperText> */}
-      </FormControl>
-    </div>
-  )
-}
+        ))}
+      </Select>
+    </FormControl>
+  );
+};
 
 export default SelectPerson;
-
-const filterStyle = {
-  width: '60px',
-  height: '40px',
-  bgcolor: 'white',
-  color: 'black',
-  borderRadius: '20px',
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  fontWeight: 'bold',
-  cursor: 'pointer',
-  margin: '10px',
-};

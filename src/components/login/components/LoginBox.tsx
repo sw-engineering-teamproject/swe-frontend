@@ -6,7 +6,7 @@ import React, { useState } from 'react'
 
 const LoginBox = () => {
   const router = useRouter();
-  const {setAccessToken} = useUser();
+  const {setAccessToken, setNickname} = useUser();
   const [id, setId] = useState<string>('');
   const [pw, setPw] = useState<string>('');
   const handleIdChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -22,6 +22,7 @@ const LoginBox = () => {
     if(data){
       console.log(data.token);
       setAccessToken(data.token);
+      setNickname(data.nickname);
       router.push('/');
     }
   };
