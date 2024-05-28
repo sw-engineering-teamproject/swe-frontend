@@ -38,18 +38,17 @@ const Main = () => {
   return (
     <Box sx={containerStyle}>
     <Box sx={searchBoxStyle}>
-      {/* <TextField sx={textFieldStyle} id='outlined-basic' label='search...' variant='outlined' onChange={handleIdChange}/>
-      <CardMedia
-        component="img"
-        image={'/images/search.png'}
-        title="profile"
-        sx={searchStyle}
-        onClick={handleSearch}
-        /> */}
+      {
+        user.accessToken ?
+        <>
         <Box sx={createStyle} onClick={openCreateProject}>
           Create
         </Box>
         <CreateBox checkOpen={checkOpen} handleClose={handleLogoutClose}/>
+        </>
+        :
+        ''
+      }
     </Box>
         {
           user.accessToken ?
@@ -75,6 +74,8 @@ const containerStyle = {
   flexDirection: 'column',
   alignItems: 'center',
   gap: '1rem',
+  fontWeight: 'bold',
+  fontSize: '22px',
 };
 
 const titleStyle = {

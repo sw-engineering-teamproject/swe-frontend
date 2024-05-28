@@ -62,7 +62,8 @@ export interface UserContextValues{
 const contextDefaultValue: UserContextValues = {
   user:{
     nickname: '',
-    accessToken: 'eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjYXUtc3dlIiwiaWF0IjoxNzE2ODc4MjcxLCJleHAiOjE3MjQ2NTQyNzEsInVzZXJJZCI6MX0.XhvS2PxtdKPJvPKcjjnXngSRPXTTgM3b2b-mgdzhQuQ',
+    // accessToken: 'eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjYXUtc3dlIiwiaWF0IjoxNzE2ODc4MjcxLCJleHAiOjE3MjQ2NTQyNzEsInVzZXJJZCI6MX0.XhvS2PxtdKPJvPKcjjnXngSRPXTTgM3b2b-mgdzhQuQ',
+    accessToken: '',
     userId: -1,
   },
   setNickname: () => {},

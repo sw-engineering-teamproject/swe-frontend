@@ -9,7 +9,7 @@ import { getIssueList, getIssueStatusList, getUsers } from '@/apis/issue';
 import { getSearch } from '@/apis/project';
 
 const Project = () => {
-  const { setProject, issueList, setIssueList, user, projectId } = useUser();
+  const { setProject, issueList, setIssueList, user, projectId, setIssueId } = useUser();
   const router = useRouter();
   const title = router.query.title;
   const [searchContent, setSearchContent] = useState<string>('');
@@ -48,6 +48,7 @@ const Project = () => {
   };
 
   const openCreateProject = () => {
+    setIssueId(-1);
     router.push(`/issue`);
   };
 

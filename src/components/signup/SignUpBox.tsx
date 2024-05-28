@@ -1,17 +1,34 @@
-import { isNicknameDuplicated, postRegister } from '@/apis/login';
-import { Box, TextField } from '@mui/material'
+import { isNicknameDuplicated, postRegister, getRoles } from '@/apis/login';
+import { Box, TextField, FormControl, InputLabel, Select, MenuItem, SelectChangeEvent } from '@mui/material';
 import { useRouter } from 'next/router';
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react';
+import CanSignUpBox from './CanSignUp';
 import DuplicationBox from './DuplicationBox';
 
 const SignUpBox = () => {
   const router = useRouter();
   const [checkOpen, setCheckOpen] = useState<boolean>(false);
+  const [cantOpen, setCantOpen] = useState<boolean>(false);
   const [id, setId] = useState<string>('');
   const [pw, setPw] = useState<string>('');
   const [name, setName] = useState<string>('');
   const [role, setRole] = useState<string>('');
-  const [duplicated, isDuplicated] = useState<boolean>(false);
+  const [roles, setRoles] = useState<string[]>([]);
+  const [duplicated, setDuplicated] = useState<boolean>(true);
+
+  useEffect(() => {
+    const fetchRoles = async () => {
+      try {
+        const response = await getRoles();
+        setRoles(response.userRoleNames || []);
+      } catch (error) {
+        console.error('Error fetching roles:', error);
+        setRoles([]);
+      }
+    };
+    fetchRoles();
+  }, []);
+
   const handleIdChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setId(event.target.value);
   };
@@ -24,31 +41,34 @@ const SignUpBox = () => {
     setName(event.target.value);
   };
 
-  const handleRoleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setRole(event.target.value);
+  const handleRoleChange = (event: SelectChangeEvent<string>) => {
+    setRole(event.target.value as string);
   };
 
   const handleClick = async () => {
-    const success = await postRegister({id, pw, name, role});
-    if(success){
-      router.push('/login');
+    if(duplicated === true){
+      setCantOpen(true);
+    }else{
+      const success = await postRegister({id, pw, name, role});
+      if(success){
+        router.push('/login');
+      }
     }
   };
 
   const handleLogoutClose = () => {
     setCheckOpen(false);
-  }
-  const handleOpen = () => {
-    handleLogoutClose();
-  }
+  };
+
+  const handleCantClose = () => {
+    setCantOpen(false);
+  };
 
   const checkDuplication = async () => {
     const isDuplicated = await isNicknameDuplicated(name);
-    if(isDuplicated !== undefined && isDuplicated === true) {
-      
-    }
+    setDuplicated(isDuplicated === true);
     setCheckOpen(true);
-  }
+  };
 
   return (
     <Box sx={containerStyle}>
@@ -60,20 +80,36 @@ const SignUpBox = () => {
         <TextField sx={textFieldStyle} id='outlined-basic' label='ID' variant='outlined' onChange={handleIdChange}/>
         PassWord
         <TextField sx={textFieldStyle} id='outlined-basic' label='PW' variant='outlined' onChange={handlePwChange}/>
-        Role
-        <TextField sx={textFieldStyle} id='outlined-basic' label='Role' variant='outlined' onChange={handleRoleChange}/>
         Nickname
         <Box sx={nicknameStyle}>
-        <TextField sx={textFieldStyle} id='outlined-basic' label='Nickname' variant='outlined' onChange={handleNameChange}/>
-        <Box sx={nicknameButtonStyle} onClick={checkDuplication}>
-          중복 확인
+          <TextField sx={textFieldStyle} id='outlined-basic' label='Nickname' variant='outlined' onChange={handleNameChange}/>
+          <Box sx={nicknameButtonStyle} onClick={checkDuplication}>
+            중복 확인
+          </Box>
         </Box>
-        </Box>
+        Role
+        <FormControl sx={{ m: 1, minWidth: 120 }}>
+          <InputLabel id='role-select-label'>Role</InputLabel>
+          <Select
+            labelId='role-select-label'
+            id='role-select'
+            value={role}
+            label='Role'
+            onChange={handleRoleChange}
+          >
+            {roles.map((roleItem, index) => (
+              <MenuItem key={index} value={roleItem}>
+                {roleItem}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
       </Box>
       <Box sx={buttonStyle} onClick={handleClick}>
         DONE
       </Box>
       <DuplicationBox checkOpen={checkOpen} handleClose={handleLogoutClose} isDuplicated={duplicated}/>
+      <CanSignUpBox checkOpen={cantOpen} handleClose={handleCantClose} isDuplicated={duplicated}/>
     </Box>
   )
 }
@@ -98,7 +134,6 @@ const titleStyle = {
   justifyContent: 'center',
   alignItems: 'center',
   textAlign: 'center',
-
   fontFamily: 'Inter',
   fontSize: '1.7rem',
   fontStyle: 'normal',
@@ -131,7 +166,6 @@ const textFieldStyle = {
   },
   '& .MuiInputBase-input': {
     padding: '10px',
-
   },
   '& .MuiInputLabel-root': {
     transform: 'translate(14px, 14px) scale(1)',
@@ -151,11 +185,9 @@ const buttonStyle = {
   bgcolor: 'grey',
   color: 'white',
   fontWeight: 'bold',
-  
   borderRadius: '10px',
   margin: '10px',
   cursor: 'pointer',
-  
   '&:hover': {
     bgcolor: 'black',
   },
@@ -179,9 +211,8 @@ const nicknameButtonStyle = {
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
-
   '&:hover': {
     bgcolor: 'black',
     cursor: 'pointer',
   },
-}
+};

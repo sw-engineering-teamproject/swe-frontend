@@ -18,10 +18,19 @@ const CreateBox: React.FC<LogoutModalProps> = ({ checkOpen, handleClose }) => {
   const handleReporterChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setReporter(event.target.value);
   };
-  const handleCreate = async() => {
-    await postProject({title, accessToken: user.accessToken});
-    handleClose();
-  }
+
+  const handleCreate = async () => {
+    try {
+      await postProject({ title, accessToken: user.accessToken });
+      handleClose();
+    } catch (error: any) {
+      if (error.response && error.response.status === 403) {
+        console.error(1);
+      } else {
+        console.error(error);
+      }
+    }
+  };
   
   return (
     <Dialog open={checkOpen} onClose={handleClose}>
