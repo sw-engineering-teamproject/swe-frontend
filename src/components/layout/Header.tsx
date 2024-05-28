@@ -11,8 +11,6 @@ const Header = () => {
   const gotoLogin = () => {
     if(user.nickname === ''){
       router.push('/login');
-    }else{
-      router.push('/login');
     }
   }
   const gotoHome = () => {
