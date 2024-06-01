@@ -7,6 +7,7 @@ import IssueBox from './IssueBox';
 import Filter from './Filter';
 import { getIssueList, getIssueStatusList, getUsers } from '@/apis/issue';
 import { getSearch } from '@/apis/project';
+import TitleBox from './TitleBox';
 
 const Project = () => {
   const { setProject, issueList, setIssueList, user, projectId, setIssueId } = useUser();
@@ -137,9 +138,10 @@ const Project = () => {
         </Box>
         <CreateBox checkOpen={checkOpen} handleClose={handleLogoutClose} />
       </Box>
+      <TitleBox/>
       <Box sx={issueContainer}>
         {issueList?.map((issue, index) => (
-          <IssueBox key={index} title={issue.title} id={issue.id} />
+          <IssueBox key={index} title={issue.title} id={issue.id} status={issue.issueStatus} reporter={issue.reporterName} assignee={issue.assigneeName}/>
         ))}
       </Box>
     </Box>

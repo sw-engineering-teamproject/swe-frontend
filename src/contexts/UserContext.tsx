@@ -24,7 +24,9 @@ export interface ProjectProps {
 export interface IssueProps {
   id: number;
   title: string;
-  reporter?: string;
+  issueStatus: string;
+  reporterName: string;
+  assigneeName: string | null;
 }
 
 export interface UserContextValues{
