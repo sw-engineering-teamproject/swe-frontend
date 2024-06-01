@@ -65,7 +65,9 @@ const SignUpBox = () => {
   };
 
   const checkDuplication = async () => {
-    const isDuplicated = await isNicknameDuplicated(name);
+    const response = await isNicknameDuplicated(name);
+    const isDuplicated = response.isDuplicated;
+    console.log(isDuplicated);
     setDuplicated(isDuplicated === true);
     setCheckOpen(true);
   };
