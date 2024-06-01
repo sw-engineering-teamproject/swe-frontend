@@ -21,7 +21,7 @@ const IssueBox = ({title, id}: {title: string, id: number}) => {
 export default IssueBox;
 
 const containerStyle = {
-  width: '50%',
+  width: '100%',
   height: '70px',
   bgcolor: 'white',
   boxShadow: '0px 1px 1px 0px rgba(0, 0, 0, 0.10)',
@@ -29,6 +29,7 @@ const containerStyle = {
   display: 'flex',
   alignItems: 'center',
   paddingLeft: '30px',
+  marginBottom: '20px',
 
   fontSize: '20px',
   fontWeight: 'bold',

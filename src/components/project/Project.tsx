@@ -137,10 +137,11 @@ const Project = () => {
         </Box>
         <CreateBox checkOpen={checkOpen} handleClose={handleLogoutClose} />
       </Box>
-
-      {issueList?.map((issue, index) => (
-        <IssueBox key={index} title={issue.title} id={issue.id} />
-      ))}
+      <Box sx={issueContainer}>
+        {issueList?.map((issue, index) => (
+          <IssueBox key={index} title={issue.title} id={issue.id} />
+        ))}
+      </Box>
     </Box>
   );
 };
@@ -204,3 +205,9 @@ const selectStyle = {
   minWidth: '100px',
   width: '100%',
 };
+
+const issueContainer = {
+width: '50%',
+height: '550px',
+overflow: 'scroll',
+}

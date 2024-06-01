@@ -167,3 +167,17 @@ export const getUsers = async ({accessToken}: {accessToken: string}) => {
     console.error(error);
   }
 };
+
+export const getUsersRecommended = async ({accessToken, issueId}: {accessToken: string, issueId: number}) => {
+  try{
+    const response = await axios.get(`${baseURL}/Issues/${issueId}/recommend`,
+    {
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        }
+      });
+    return response.data;
+  }catch(error){
+    console.error(error);
+  }
+};

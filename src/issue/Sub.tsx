@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Box } from '@mui/material';
 import SelectPerson from './SelectPerson';
-import { getIssuePriorityList, getIssueStatusList, getUsers } from '@/apis/issue';
+import { getIssuePriorityList, getIssueStatusList, getUsers, getUsersRecommended } from '@/apis/issue';
 import { useUser } from '@/hook/useUser';
 
 interface User {
@@ -35,7 +35,7 @@ interface Info {
 }
 
 const Sub = ({ issueContent, onReload, onError }: { issueContent: Issue | null, onReload: () => void, onError: (message: string) => void }) => {
-  const { user } = useUser();
+  const { user, issueId } = useUser();
   const [statusList, setStatusList] = useState<Info[]>([]);
   const [assigneeList, setAssigneeList] = useState<Info[]>([]);
   const [rankList, setRankList] = useState<Info[]>([]);
@@ -56,7 +56,7 @@ const Sub = ({ issueContent, onReload, onError }: { issueContent: Issue | null, 
 
     const fetchAssigneeList = async () => {
       try {
-        const assigneeData = await getUsers({ accessToken: user.accessToken });
+        const assigneeData = await getUsersRecommended({ accessToken: user.accessToken, issueId });
         const formattedAssigneeData = assigneeData.map((assignee: { id: number, name: string }) => ({ infoName: assignee.name, userId: assignee.id }));
         setAssigneeList(formattedAssigneeData || []);
       } catch (error) {
