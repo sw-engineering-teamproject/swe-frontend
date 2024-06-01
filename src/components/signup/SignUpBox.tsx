@@ -66,7 +66,7 @@ const SignUpBox = () => {
 
   const checkDuplication = async () => {
     const isDuplicated = await isNicknameDuplicated(name);
-    setDuplicated(isDuplicated);
+    setDuplicated(isDuplicated === true);
     setCheckOpen(true);
   };
 
@@ -98,6 +98,7 @@ const SignUpBox = () => {
             onChange={handleRoleChange}
           >
             {roles.map((roleItem, index) => (
+              roleItem !== 'admin' &&
               <MenuItem key={index} value={roleItem}>
                 {roleItem}
               </MenuItem>
