@@ -108,7 +108,7 @@ const Sub = ({ issueContent, onReload, onError }: { issueContent: Issue | null, 
         />
       </Box>
       <Box sx={containerStyle}>
-        Rank
+        Priority
         <SelectPerson
           infoList={rankList}
           label="Rank"
